@@ -17,6 +17,11 @@ interface BaseButtonProps {
   children: React.ReactNode;
 }
 
+//继承原生属性+Parial将属性都改成可选的
+type NativeButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+type AnchorButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
+type ButtonProps = BaseButtonProps & Partial<NativeButtonProps & AnchorButtonProps>;
+
 //对BaseButtonProps解构props
 export const Button = ({
   btnType,
@@ -26,7 +31,7 @@ export const Button = ({
   children,
   href,
   ...restProps
-}: BaseButtonProps) => {
+}: ButtonProps) => {
   // btn, btn-lg, btn-primary 拼接class
   // 最终效果：<button class="btn btn-primary btn-lg disabled"></button>
   const classes = classNames('btn', className, {

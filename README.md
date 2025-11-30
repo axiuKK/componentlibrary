@@ -223,3 +223,46 @@ export default Button
 5. **透传剩余 props** → 支持 onClick、target 等
 6. **返回 JSX** → 子内容(children) 渲染
 7. **在项目里使用** → 根据 props 控制样式和行为
+
+### 继承原生属性
+
+方法一：联合类型（Union Type）
+
+```
+type ButtonProps = ButtonHTMLProps | AnchorHTMLProps;
+```
+
+- 解释：这个 ButtonProps **可能是按钮属性，也可能是链接属性**
+- 缺点：访问属性时 TypeScript 可能不确定类型，需要做类型判断
+
+------
+
+方法二：交叉类型（Intersection Type） —— 更常用
+
+```
+type ButtonProps = CustomProps & Partial<ButtonHTMLProps & AnchorHTMLProps>;
+```
+
+- `&` 表示 **交叉类型**（Intersection）
+- 意思：ButtonProps **同时包含**：
+  - 自定义属性（btnType、size、href 等）
+  - 原生按钮属性
+  - 原生链接属性（用 Partial 包裹表示可选）
+- 优点：使用 `...restProps` 时，TS 能智能提示所有属性，不需要额外判断
+
+> 总结：
+>
+> - 联合类型（`|`） = 多种可能，某一时刻只能是其中一种
+> - 交叉类型（`&`） = 多种类型叠加，同时拥有
+> - 组件里用交叉类型更合适，因为我们希望自定义属性和原生属性 **都能用**
+
+`Partial<T>` 是 TypeScript 的一个 **工具类型（Utility Type）**，作用是：
+
+> 把类型 `T` 里的 **所有属性都变为可选（optional）**
+
+交叉类型，包含 `<button>` 和 `<a>` 的所有原生属性
+
+如果不加 `Partial`：
+
+- 会报错，因为交叉类型里所有原生属性都是必填
+- 加 `Partial` 后，原生属性 **都变为可选**，你只传 `onClick` 或 `type` 就可以了
