@@ -1,5 +1,2 @@
-// config
-@import "variables";
-
-//layout
-@import "reboot";
+@use "./_variables";
+@use "./_reboot";
