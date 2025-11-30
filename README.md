@@ -266,3 +266,50 @@ type ButtonProps = CustomProps & Partial<ButtonHTMLProps & AnchorHTMLProps>;
 
 - 会报错，因为交叉类型里所有原生属性都是必填
 - 加 `Partial` 后，原生属性 **都变为可选**，你只传 `onClick` 或 `type` 就可以了
+
+## 测试
+
+安装vitest
+
+```js
+npm install -D vitest
+```
+
+```js
+//package.json
+{
+  "scripts": {
+    "test": "vitest"
+  }
+}
+```
+
+安装testing-library
+
+```js
+npm install --save-dev @testing-library/react @testing-library/jest-dom jsdom
+```
+
+配置enviroment，这是vite.config.ts
+
+```js
+/// <reference types="vitest/config" />
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true,          // 可以直接使用 test/expect
+    environment: "jsdom",   // 模拟浏览器环境
+  }
+})
+```
+
+安装jest-dom
+
+```js
+npm install --save-dev @testing-library/jest-dom
+```
+
