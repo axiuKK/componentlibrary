@@ -8,6 +8,11 @@ function App() {
       <Button btnType="primary" disabled>主按钮</Button>
       <Button btnType="danger">危险按钮</Button>
       <Button btnType="link" href="https://www.baidu.com" disabled>链接按钮</Button>
+      <Button size="sm">小按钮</Button>
+      <Button size="lg">大按钮</Button>
+      <Button btnType="primary" size="lg">大主按钮</Button>
+      <Button btnType="danger" size="lg">大危险按钮</Button>
+      <Button btnType="link" size="lg">大链接按钮</Button>
     </>
   )
 }

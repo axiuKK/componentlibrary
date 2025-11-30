@@ -1,0 +1,71 @@
+@use "../../styles/_variables" as vars;
+@use "sass:color";
+
+.btn {
+  font-family: vars.$font-family-base;
+  font-weight: 400;
+  border-radius: vars.$btn-border-radius;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+
+  &.btn-default {
+    background-color: vars.$default;
+    color: #212529;
+    border: 1px solid #ced4da;
+
+    &:hover {
+      background-color: color.adjust(vars.$default, $lightness: -5%);
+    }
+  }
+
+  &.btn-primary {
+    background-color: vars.$primary;
+    color: #fff;
+    border: 1px solid vars.$primary;
+
+    &:hover {
+      background-color: color.adjust(vars.$primary, $lightness: -10%);
+    }
+  }
+
+  &.btn-danger {
+    background-color: vars.$danger;
+    color: #fff;
+    border: 1px solid vars.$danger;
+
+    &:hover {
+      background-color: color.adjust(vars.$danger, $lightness: -10%);
+    }
+  }
+
+  &.btn-link {
+    background: transparent;
+    color: vars.$link;
+    border: none;
+    padding: 0;
+
+    &:hover {
+      text-decoration: underline;
+      color: color.adjust(vars.$link, $lightness: -10%);
+    }
+
+    &.disabled {
+      color: #6c757d;
+      pointer-events: none;
+      text-decoration: none;
+    }
+  }
+
+  &.btn-sm {
+    padding: vars.$btn-padding-sm;
+    font-size: vars.$btn-font-size-sm;
+  }
+
+  &.btn-lg {
+    padding: vars.$btn-padding-lg;
+    font-size: vars.$btn-font-size-lg;
+  }
+}
