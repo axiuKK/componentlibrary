@@ -39,3 +39,19 @@ $btn-font-size-lg: 1.25rem !default;
 // 边框圆角
 $btn-border-radius: 4px !default;
 
+// menu
+$menu-border-radius: 4px !default;
+$menu-border-color: #dee2e6 !default;
+$menu-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !default;
+$menu-transition: all 0.3s ease !default;
+
+// menu-item
+$menu-item-padding-y: .5rem !default;
+$menu-item-padding-x: 1rem !default;
+$menu-item-font-size: 1rem !default;
+$menu-item-line-height: 1.5 !default;
+$menu-item-color: #212529 !default;
+$menu-item-hover-color: $primary !default;
+$menu-item-active-color: $primary !default;
+$menu-item-active-border-width: 2px !default;
+$menu-item-disabled-color: $secondary !default;
