@@ -1,9 +1,16 @@
 import Button from './components/Button/button'
+import Menu from './components/Menu/menu'
+import MenuItem from './components/Menu/menuItem'
 
 function App() {
 
   return (
     <>
+      <Menu mode="horizontal">
+        <MenuItem index={0}>首页</MenuItem>
+        <MenuItem index={1} disabled>关于</MenuItem>
+        <MenuItem index={2}>联系</MenuItem>
+      </Menu>
       <Button>默认按钮</Button>
       <Button btnType="primary" disabled>主按钮</Button>
       <Button btnType="danger">危险按钮</Button>
