@@ -141,16 +141,27 @@ if (btnType === 'link' && href) {
 - **`<button>`** → 其他情况
 - `{...restProps}` → 支持额外属性（onClick、target 等）
 
-------
+测试发现这样定义会失效，所以直接传入默认值
 
 ```js
-// 给 props 设置默认值
+/*// 给 props 设置默认值
 // 当用户使用组件时，没有传某个 prop，就用这里设置的默认值
 Button.defaultProps = {
   btnType: 'default',
   size: 'sm',
   disabled: false,
-}
+}*/
+
+//对BaseButtonProps解构props
+export const Button = ({
+  btnType='default',
+  className,
+  disabled=false,
+  size='sm',
+  children,
+  href,
+  ...restProps
+}: ButtonProps) => {
 ```
 
 5️⃣ 完整组件框架
@@ -160,10 +171,10 @@ import React from 'react'
 import classNames from 'classnames'
 
 export const Button = ({
-  btnType,
+  btnType='default',
   className,
-  disabled,
-  size,
+  disabled=false,
+  size='sm',
   children,
   href,
   ...restProps

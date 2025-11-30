@@ -24,10 +24,10 @@ type ButtonProps = BaseButtonProps & Partial<NativeButtonProps & AnchorButtonPro
 
 //对BaseButtonProps解构props
 export const Button = ({
-  btnType,
+  btnType='default',
   className,
-  disabled,
-  size,
+  disabled=false,
+  size='sm',
   children,
   href,
   ...restProps
@@ -61,14 +61,6 @@ export const Button = ({
       </button>
     )
   }
-}
-
-// 给 props 设置默认值
-// 当用户使用组件时，没有传某个 prop，就用这里设置的默认值
-Button.defaultProps = {
-  btnType: 'default',
-  size: 'sm',
-  disabled: false,
 }
 
 export default Button;
