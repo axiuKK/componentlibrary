@@ -331,3 +331,16 @@ npm install --save-dev @testing-library/jest-dom
 ## Menu导航组件
 
 ![image-20251130205634188](assets/image-20251130205634188.png)
+
+分为Menu和MenuItem两个组件
+
+### context
+
+要将Menu的props传入MenuItem，使用hook
+
+ Context
+
+- 是 React 自带的 API（`createContext` + `useContext`）。
+- 适合组件树中少量状态共享，例如：菜单的选中项、主题色、语言切换等。
+- 状态通常由父组件管理（这里的 `Menu`），然后通过 Context 传给子组件。
+- 使用简单，不需要额外依赖。

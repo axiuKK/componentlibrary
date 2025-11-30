@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-      <Menu mode="horizontal">
+      <Menu mode="horizontal" defaultIndex={0} onSelect={(index) => console.log(index)}>
         <MenuItem index={0}>首页</MenuItem>
         <MenuItem index={1} disabled>关于</MenuItem>
         <MenuItem index={2}>联系</MenuItem>
