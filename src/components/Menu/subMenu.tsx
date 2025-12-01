@@ -18,7 +18,7 @@ const SubMenu = ({
     children,
 }: SubMenuProps) => {
     const { index: currentActive } = useContext(MenuContext)
-    const classes = classNames('menu-item submenu-item', className, {
+    const classes = classNames('submenu-item', className, {
         'active': index === currentActive,
     })
 
@@ -31,11 +31,11 @@ const SubMenu = ({
                     return React.cloneElement(childElement, {
                         index: index,
                     })
-                }else{
+                } else {
                     console.error('子菜单只能包含MenuItem组件')
                     return null
                 }
-            }else{
+            } else {
                 console.error('子菜单只能包含function组件')
                 return null
             }
@@ -48,7 +48,10 @@ const SubMenu = ({
             <div className='submenu-title'>
                 {title}
             </div>
-            {renderChildren()}
+
+            <ul className="submenu">
+                {renderChildren()}
+            </ul>
         </li>
     )
 }

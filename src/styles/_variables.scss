@@ -21,6 +21,9 @@ $font-size-root: null !default;
 // 行高
 $line-height-base: 1.5 !default;
 
+//body
+$body-color: #212529 !default;
+
 // 主题色
 $primary: #0d6efd !default;
 $danger: #dc3545 !default;
@@ -40,6 +43,7 @@ $btn-font-size-lg: 1.25rem !default;
 $btn-border-radius: 4px !default;
 
 // menu
+$menu-border-width: 1px !default;
 $menu-border-radius: 4px !default;
 $menu-border-color: #dee2e6 !default;
 $menu-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !default;
@@ -55,3 +59,6 @@ $menu-item-hover-color: $primary !default;
 $menu-item-active-color: $primary !default;
 $menu-item-active-border-width: 2px !default;
 $menu-item-disabled-color: $secondary !default;
+
+//submenu
+$submenu-box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
