@@ -2,146 +2,124 @@
 @use "sass:color";
 
 .menu {
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 0;
-  margin-bottom: 30px;
-  list-style: none;
-  border-bottom: vars.$menu-border-width solid vars.$menu-border-color;
-  box-shadow: vars.$menu-box-shadow;
-
-  > .menu-item {
-    padding: vars.$menu-item-padding-y vars.$menu-item-padding-x;
-    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 30px;
+    list-style: none;
+    border-bottom: vars.$menu-border-width solid vars.$menu-border-color;
+    box-shadow: vars.$menu-box-shadow;
     transition: vars.$menu-transition;
 
-    &:hover,
-    &:focus {
-      text-decoration: none;
-    }
-
-    &.disabled {
-      color: vars.$menu-item-disabled-color;
-      pointer-events: none;
-      cursor: default;
-    }
-
-    &.active,
-    &:hover {
-      color: vars.$menu-item-active-color;
-      border-bottom: vars.$menu-item-active-border-width solid vars.$menu-item-active-color;
-    }
-  }
-
-  // Submenu 容器
-  .submenu-item {
-    position: relative;
-
+    >.menu-item,
     .submenu-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+        padding: vars.$menu-item-padding-y vars.$menu-item-padding-x;
+        cursor: pointer;
+        transition: vars.$menu-transition;
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+        }
+
+        &.disabled {
+            color: vars.$menu-item-disabled-color;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        &.active,
+        &:hover {
+            color: vars.$menu-item-active-color;
+            border-bottom: vars.$menu-item-active-border-width solid vars.$menu-item-active-color;
+        }
     }
 
-    .arrow-icon {
-      transition: transform 0.25s ease-in-out;
-      margin-left: 3px;
+    // Submenu 容器
+    .submenu-item {
+        position: relative;
+
+        .arrow-icon {
+            transition: transform 0.25s ease-in-out;
+            margin-left: 3px;
+        }
+
+        &:hover {
+            .arrow-icon {
+                transform: rotate(180deg);
+            }
+        }
+
+        &.vertical {
+            .arrow-icon {
+                transform: rotate(0deg) !important;
+            }
+        }
+
+        &.vertical.opened {
+            .arrow-icon {
+                transform: rotate(180deg) !important;
+            }
+        }
     }
 
-    &:hover {
-      .arrow-icon {
-        transform: rotate(180deg);
-      }
+    .submenu {
+        list-style: none;
+        padding-left: 0;
+        white-space: nowrap;
+        min-width: 100%;
+
+        >.menu-item {
+            padding: vars.$menu-item-padding-y vars.$menu-item-padding-x;
+            cursor: pointer;
+            transition: vars.$menu-transition;
+            color: vars.$body-color;
+            width: 100%;
+            margin-left: 10px;
+
+            &:hover,
+            &.active {
+                color: vars.$menu-item-active-color !important;
+            }
+        }
+
+        .submenu.menu-opened {
+            display: block;
+        }
     }
-
-    &.vertical {
-      .arrow-icon {
-        transform: rotate(0deg) !important;
-      }
-    }
-
-    &.vertical.opened {
-      .arrow-icon {
-        transform: rotate(180deg) !important;
-      }
-    }
-  }
-
-  .submenu {
-    list-style: none;
-    padding-left: 0;
-    white-space: nowrap;
-    margin: 0;
-    min-width: 120px;
-
-    position: absolute;
-    left: 0;
-    top: calc(100% + 6px);
-    z-index: 1000;
-
-    background: vars.$white;
-    border: vars.$menu-border-width solid vars.$menu-border-color;
-    border-radius: vars.$menu-border-radius;
-    box-shadow: vars.$menu-box-shadow;
-
-    /* 初始隐藏 */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.2s ease-in-out;
-
-    .menu-item {
-      padding: vars.$menu-item-padding-y vars.$menu-item-padding-x;
-      cursor: pointer;
-      transition: vars.$menu-transition;
-      color: vars.$body-color;
-
-      &.active,
-      &:hover {
-        color: vars.$menu-item-active-color !important;
-      }
-    }
-  }
-
-  .submenu.menu-opened {
-    /* 显示 submenu */
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
 }
 
 // 水平菜单
 .menu-horizontal {
-  > .menu-item {
-    border-bottom: vars.$menu-item-active-border-width solid transparent;
-  }
+    >.menu-item {
+        border-bottom: vars.$menu-item-active-border-width solid transparent;
+    }
 
-  .submenu {
-    position: absolute;
-    background: vars.$white;
-    z-index: 100;
-    top: calc(100% + 8px);
-    left: 0;
-    border: vars.$menu-border-width solid vars.$menu-border-color;
-    box-shadow: vars.$submenu-box-shadow;
-  }
+    .submenu {
+        position: absolute;
+        background: vars.$white;
+        z-index: 100;
+        top: calc(100% + 8px);
+        left: 0;
+        border: vars.$menu-border-width solid vars.$menu-border-color;
+        box-shadow: vars.$submenu-box-shadow;
+    }
 }
 
 // 垂直菜单
 .menu-vertical {
-  flex-direction: column;
-  border-bottom: 0;
-  margin: 10px 20px;
-  border-right: vars.$menu-border-width solid vars.$menu-border-color;
+    flex-direction: column;
+    border-bottom: 0px;
+    margin: 10px 20px;
+    border-right: vars.$menu-border-width solid vars.$menu-border-color;
 
-  > .menu-item {
-    border-left: vars.$menu-item-active-border-width solid transparent;
+    >.menu-item {
+        border-left: vars.$menu-item-active-border-width solid transparent;
 
-    &.active,
-    &:hover {
-      border-bottom: 0;
-      border-left: vars.$menu-item-active-border-width solid vars.$menu-item-active-color;
+        &.active,
+        &:hover {
+            border-bottom: 0px;
+            border-left: vars.$menu-item-active-border-width solid vars.$menu-item-active-color;
+        }
     }
-  }
 }
