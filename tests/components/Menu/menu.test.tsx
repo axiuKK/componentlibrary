@@ -5,6 +5,7 @@ import MenuItem from '../../../src/components/Menu/menuItem'
 import '@testing-library/jest-dom/vitest'
 import { MenuProps } from '../../../src/components/Menu/menu'
 import Button from '../../../src/components/Button/button'
+import SubMenu from '../../../src/components/Menu/subMenu'
 
 const defaultProps: MenuProps = {
   //index=0，默认选中第一个菜单项
@@ -33,6 +34,10 @@ const generateMenu = (props: MenuProps) => {
       <MenuItem index="2">
         xyz
       </MenuItem>
+      <SubMenu title="下拉菜单">
+        <MenuItem>子项1</MenuItem>
+        <MenuItem>子项2</MenuItem>
+      </SubMenu>
     </Menu>
   )
 }
@@ -73,7 +78,10 @@ describe('Menu 组件', () => {
     expect(menuElement).toBeInTheDocument()  // 检查是否在文档中
     expect(menuElement.tagName).toBe('UL')  // 检查标签名是否为 ul
     expect(menuElement).toHaveClass('menu test')  // 检查默认类名
-    expect(menuElement.getElementsByTagName('li').length).toBe(3)  // 检查是否渲染了 3 个 li
+    //expect(menuElement.getElementsByTagName('li').length).toBe(3)  // 检查是否渲染了 3 个 li
+
+    //scope选择当前元素的 直接子元素，而不是所有后代元素
+    expect(menuElement.querySelectorAll(':scope > li').length).toBe(4)  // 检查是否渲染了 4 个 li
     //menuItem组件，className=menu-item
     expect(activeElement).toHaveClass('menu-item active')  // 检查默认类名
     expect(disabledElement).toHaveClass('menu-item disabled')  // 检查默认类名
