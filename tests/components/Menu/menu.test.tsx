@@ -62,6 +62,7 @@ describe('Menu 组件', () => {
     const item = wrapper.getByText('xyz')
     item.click()
     expect(defaultProps.onSelect).toHaveBeenCalledWith(2)
+    expect(defaultProps.onSelect).not.toHaveBeenCalledWith(0)
 
     //waitFor 会循环检查 DOM 更新，直到满足条件
     await waitFor(() => {
@@ -71,6 +72,8 @@ describe('Menu 组件', () => {
 
   })
   test('vertical menu', () => {
-
+    const verticalWrapper = render(generateMenu(VerticalProps))
+    const verticalMenuElement = verticalWrapper.getByTestId('test-menu')
+    expect(verticalMenuElement).toHaveClass('menu-vertical')  // 检查默认类名
   })
 })
