@@ -8,29 +8,29 @@ import Button from '../../../src/components/Button/button'
 
 const defaultProps: MenuProps = {
   //index=0，默认选中第一个菜单项
-  defaultIndex: 0,
+  defaultIndex: '0',
   //模拟点击函数，用于测试点击事件是否触发
   onSelect: vi.fn(),
   className: 'test',
-  children: <MenuItem index={0}>test</MenuItem>,
+  children: <MenuItem index="0">test</MenuItem>,
 }
 const VerticalProps: MenuProps = {
-  defaultIndex: 0,
+  defaultIndex: '0',
   mode: 'vertical',
-  children: <MenuItem index={0}>test</MenuItem>,
+  children: <MenuItem index="0">test</MenuItem>,
 }
 
 const generateMenu = (props: MenuProps) => {
   return (
     <Menu {...props}>
-      //index=0,默认选中第一个菜单项,所以为active
-      <MenuItem index={0}>
+      //index="0",默认选中第一个菜单项,所以为active
+      <MenuItem index="0">
         active
       </MenuItem>
-      <MenuItem index={1} disabled>
+      <MenuItem index="1" disabled>
         disabled
       </MenuItem>
-      <MenuItem index={2}>
+      <MenuItem index="2">
         xyz
       </MenuItem>
     </Menu>
@@ -40,14 +40,14 @@ const generateMenu = (props: MenuProps) => {
 const wrongMenu = (props: MenuProps) => {
   return (
     <Menu {...props}>
-      //index=0,默认选中第一个菜单项,所以为active
-      <MenuItem index={0}>
+      //index="0",默认选中第一个菜单项,所以为active
+      <MenuItem index="0">
         active
       </MenuItem>
-      <MenuItem index={1} disabled>
+      <MenuItem index="1" disabled>
         disabled
       </MenuItem>
-      <MenuItem index={2}>
+      <MenuItem index="2">
         xyz
       </MenuItem>
       <li>123</li>//HTML
@@ -81,8 +81,9 @@ describe('Menu 组件', () => {
   test('click menu item', async () => {
     const item = wrapper.getByText('xyz')
     item.click()
-    expect(defaultProps.onSelect).toHaveBeenCalledWith(2)
-    expect(defaultProps.onSelect).not.toHaveBeenCalledWith(0)
+    //onSelect函数被调用，传入的参数index为'2'
+    expect(defaultProps.onSelect).toHaveBeenCalledWith('2')
+    expect(defaultProps.onSelect).not.toHaveBeenCalledWith('0')
 
     //waitFor 会循环检查 DOM 更新，直到满足条件
     await waitFor(() => {
