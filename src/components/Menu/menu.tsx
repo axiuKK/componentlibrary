@@ -14,14 +14,18 @@ export interface MenuProps {
     children: React.ReactNode;
 }
 
+//context属性种类
 interface IMenuContext {
     index: number;
     onSelect: (index: number) => void;
+    mode?: MenuMode;
 }
 
+//context默认值
 export const MenuContext = createContext<IMenuContext>({
     index: 0,
     onSelect: () => { },
+    mode: 'horizontal',
 })
 
 const Menu = ({
@@ -33,13 +37,15 @@ const Menu = ({
     children,
 }: MenuProps) => {
     const [currentActive, setCurrentActive] = useState(defaultIndex)
+    //实际传入的值
     const passedContext: IMenuContext = {
         index: currentActive,
         onSelect: (index) => {
             setCurrentActive(index)
             onSelect(index)
             alert(index)
-        }
+        },
+        mode: mode,
     }
 
     const classes = classNames('menu', className, {

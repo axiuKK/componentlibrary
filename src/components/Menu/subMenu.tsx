@@ -17,7 +17,7 @@ const SubMenu = ({
     className = '',
     children,
 }: SubMenuProps) => {
-    const { index: currentActive } = useContext(MenuContext)
+    const { index: currentActive, mode } = useContext(MenuContext)
     const [menuOpen, setMenuOpen] = useState(false)
 
     const classes = classNames('submenu', className, {
@@ -29,6 +29,21 @@ const SubMenu = ({
         e.stopPropagation()
         setMenuOpen(!menuOpen)
     }
+    let timer: any
+    const handleMouse=(e:React.MouseEvent,toggle:boolean)=>{
+        clearTimeout(timer)
+        e.stopPropagation()
+        timer=setTimeout(()=>{
+            setMenuOpen(toggle)
+        },300)
+    }
+    const clickEvents=mode==='vertical'?{
+        onClick:handleClick,
+    }:{}
+    const mouseEvents=mode!=='vertical'?{
+        onMouseEnter:(e:React.MouseEvent)=>handleMouse(e,true),
+        onMouseLeave:(e:React.MouseEvent)=>handleMouse(e,false),
+    }:{}
 
     const renderChildren = () => {
         return React.Children.map(children, (child, index) => {
@@ -52,8 +67,8 @@ const SubMenu = ({
     }
 
     return (
-        <li key={index} className='submenu-item'>
-            <div className='submenu-title' onClick={handleClick}>
+        <li key={index} className='submenu-item' {...mouseEvents}>
+            <div className='submenu-title' {...clickEvents}>
                 {title}
             </div>
 

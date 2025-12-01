@@ -114,7 +114,8 @@
     margin: 10px 20px;
     border-right: vars.$menu-border-width solid vars.$menu-border-color;
 
-    >.menu-item {
+    >.menu-item,
+    .submenu-title {
         border-left: vars.$menu-item-active-border-width solid transparent;
 
         &.active,

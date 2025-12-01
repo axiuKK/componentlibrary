@@ -345,6 +345,52 @@ npm install --save-dev @testing-library/jest-dom
 - 状态通常由父组件管理（这里的 `Menu`），然后通过 Context 传给子组件。
 - 使用简单，不需要额外依赖。
 
+```js
+//context属性种类
+interface IMenuContext {
+    index: number;
+    onSelect: (index: number) => void;
+    mode?: MenuMode;
+}
+
+//context默认值
+export const MenuContext = createContext<IMenuContext>({
+    index: 0,
+    onSelect: () => { },
+    mode: 'horizontal',
+})
+```
+
+provider中实际传入的值
+
+```js
+const passedContext: IMenuContext = {
+        index: currentActive,
+        onSelect: (index) => {
+            setCurrentActive(index)
+            onSelect(index)
+            alert(index)
+        },
+        mode,
+    }
+```
+
+包裹组件
+
+```js
+return (
+    	//包裹
+        <MenuContext.Provider value={passedContext}>
+            <ul className={classes} style={style}>
+                {children}
+            </ul>
+        </MenuContext.Provider>
+       //包裹
+    )
+```
+
+
+
 ### 测试
 
 #### 发现active没有渲染到className中
