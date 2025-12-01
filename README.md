@@ -345,7 +345,9 @@ npm install --save-dev @testing-library/jest-dom
 - 状态通常由父组件管理（这里的 `Menu`），然后通过 Context 传给子组件。
 - 使用简单，不需要额外依赖。
 
-### 测试发现active没有渲染到className中
+### 测试
+
+#### 发现active没有渲染到className中
 
 active为异步渲染
 
@@ -380,7 +382,7 @@ const classes = classNames('menu-item', {
 
 - 所以在点击事件之后立即检查 `thirdItem.className`，可能还没更新 → 断言失败
 
-### `waitFor`
+#### `waitFor`
 
 ```js
 await waitFor(() => {
@@ -393,7 +395,7 @@ await waitFor(() => {
   2. 或者超时
 - 这样就能等待 **React 异步更新完成**，拿到最新的 DOM class
 
-### beforeEach cleanup（）
+#### beforeEach cleanup（）
 
 ```js
 beforeEach(() => {
@@ -478,7 +480,7 @@ const renderChildren = () => {
 MenuItem.displayName = 'MenuItem'
 ```
 
-测试（浏览器中）：
+#### 测试（浏览器中）：
 
 ```js
 <Menu mode="vertical" defaultIndex={0} onSelect={(index) => console.log(index)}>
@@ -494,7 +496,7 @@ MenuItem.displayName = 'MenuItem'
 
 有报错
 
-测试（文件中）：
+#### 测试（文件中）：
 
 Vitest 测试：默认console.log被拦截，需要 `spyOn` 才能捕获。
 
@@ -511,5 +513,15 @@ expect(spy).toHaveBeenCalledWith('Menu children must be function component')
 expect(spy).toHaveBeenCalledWith('Menu children must be MenuItem')
 //恢复原函数，也就是撤销 spy 的监听
 spy.mockRestore()
+```
+
+#### 自动添加index
+
+```js
+if (displayName === 'MenuItem') {
+     //给menuitem自动添加index属性
+     const indexProp = childElement.props.index ?? index;
+     return React.cloneElement(childElement, { index: indexProp });
+}
 ```
 

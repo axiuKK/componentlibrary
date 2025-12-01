@@ -60,7 +60,9 @@ const Menu = ({
                 const type = childElement.type as { displayName?: string }
                 const displayName = type.displayName
                 if (displayName === 'MenuItem') {
-                    return child
+                    //给menuitem自动添加index属性
+                    const indexProp = childElement.props.index ?? index;
+                    return React.cloneElement(childElement, { index: indexProp });
                 } else {
                     console.error('Menu children must be MenuItem')
                     return null
