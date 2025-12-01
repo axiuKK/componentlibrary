@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MenuContext } from "./menu";
 import React from "react";
 import type { MenuItemProps } from "./menuItem";
@@ -18,9 +18,17 @@ const SubMenu = ({
     children,
 }: SubMenuProps) => {
     const { index: currentActive } = useContext(MenuContext)
-    const classes = classNames('submenu-item', className, {
+    const [menuOpen, setMenuOpen] = useState(false)
+
+    const classes = classNames('submenu', className, {
         'active': index === currentActive,
+        'menu-opened': menuOpen,
     })
+
+    const handleClick = (e: React.MouseEvent) => {
+        e.stopPropagation()
+        setMenuOpen(!menuOpen)
+    }
 
     const renderChildren = () => {
         return React.Children.map(children, (child, index) => {
@@ -44,12 +52,12 @@ const SubMenu = ({
     }
 
     return (
-        <li key={index} className={classes}>
-            <div className='submenu-title'>
+        <li key={index} className='submenu-item'>
+            <div className='submenu-title' onClick={handleClick}>
                 {title}
             </div>
 
-            <ul className="submenu">
+            <ul className={classes}>
                 {renderChildren()}
             </ul>
         </li>
