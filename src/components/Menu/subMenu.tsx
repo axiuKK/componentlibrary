@@ -26,7 +26,11 @@ const SubMenu = ({
     const [menuOpen, setMenuOpen] = useState(isOpend)
 
     const classes = classNames('submenu', className, {
+        'menu-opened': menuOpen,
         'active': index === currentActive,
+    })
+
+    const submenuItemclasses=classNames('submenu-item','',{
         'menu-opened': menuOpen,
         'vertical': mode === 'vertical',
     })
@@ -76,7 +80,7 @@ const SubMenu = ({
     }
 
     return (
-        <li key={index} className='submenu-item' {...mouseEvents}>
+        <li key={index} className={submenuItemclasses} {...mouseEvents}>
             <div className='submenu-title' {...clickEvents}>
                 {title}
                 <Icon icon='angle-down' className='arrow-icon' />
