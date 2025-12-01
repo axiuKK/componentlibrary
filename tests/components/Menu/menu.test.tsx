@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { cleanup, render, RenderResult, waitFor } from '@testing-library/react'
+import { cleanup, render, RenderResult, waitFor, fireEvent } from '@testing-library/react'
 import Menu from '../../../src/components/Menu/menu'
 import MenuItem from '../../../src/components/Menu/menuItem'
 import '@testing-library/jest-dom/vitest'
@@ -14,6 +14,7 @@ const defaultProps: MenuProps = {
   onSelect: vi.fn(),
   className: 'test',
   children: <MenuItem index="0">test</MenuItem>,
+  mode: 'horizontal',
 }
 const VerticalProps: MenuProps = {
   defaultIndex: '0',
@@ -61,12 +62,28 @@ const wrongMenu = (props: MenuProps) => {
   )
 }
 
+// 在测试环境里动态创建一段 CSS，用于控制 SubMenu 默认隐藏
+const createStyleFile = () => {
+  const cssFile: string = `
+    .submenu{
+      display: none;
+    }
+    .menu-opened{
+      display: block;
+    }
+  `
+  const style = document.createElement('style')
+  style.innerHTML = cssFile
+  return style
+}
+
 let wrapper: RenderResult, menuElement: HTMLElement, activeElement: HTMLElement, disabledElement: HTMLElement
 
 describe('Menu 组件', () => {
   beforeEach(() => {
     // 每个测试用例运行前执行
     wrapper = render(generateMenu(defaultProps))
+    wrapper.container.appendChild(createStyleFile())
     //拿到被标记 data-testid="test-menu" 的 DOM 元素(即<ul>)
     menuElement = wrapper.getByTestId('test-menu')
     activeElement = wrapper.getByText('active')
@@ -80,8 +97,12 @@ describe('Menu 组件', () => {
     expect(menuElement).toHaveClass('menu test')  // 检查默认类名
     //expect(menuElement.getElementsByTagName('li').length).toBe(3)  // 检查是否渲染了 3 个 li
 
+    //subMenu组件，className=submenu
     //scope选择当前元素的 直接子元素，而不是所有后代元素
     expect(menuElement.querySelectorAll(':scope > li').length).toBe(4)  // 检查是否渲染了 4 个 li
+    expect(wrapper.getByText('下拉菜单')).toHaveClass('submenu-title')  // 检查默认类名
+    expect(wrapper.getByText('子项1')).toHaveClass('menu-item')  // 检查默认类名
+    expect(wrapper.getByText('子项2')).toHaveClass('menu-item')  // 检查默认类名
     //menuItem组件，className=menu-item
     expect(activeElement).toHaveClass('menu-item active')  // 检查默认类名
     expect(disabledElement).toHaveClass('menu-item disabled')  // 检查默认类名
@@ -120,5 +141,19 @@ describe('Menu 组件', () => {
     expect(spy).toHaveBeenCalledWith('Menu children must be MenuItem')
     //恢复原函数，也就是撤销 spy 的监听
     spy.mockRestore()
+  })
+  test('submenu', async () => {
+    expect(wrapper.queryByText('子项1')).not.toBeVisible()
+    const dropdownElement = wrapper.getByText('下拉菜单')
+    //模拟鼠标悬停事件
+    fireEvent.mouseEnter(dropdownElement)
+    await waitFor(() => {
+      expect(wrapper.getByText('子项1')).toBeVisible()
+    })
+    //模拟鼠标移出事件
+    fireEvent.mouseLeave(dropdownElement)
+    await waitFor(() => {
+      expect(wrapper.getByText('子项1')).not.toBeVisible()
+    })
   })
 })
