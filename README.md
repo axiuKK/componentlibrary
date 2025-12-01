@@ -392,3 +392,55 @@ await waitFor(() => {
   1. 断言通过
   2. 或者超时
 - 这样就能等待 **React 异步更新完成**，拿到最新的 DOM class
+
+### beforeEach cleanup（）
+
+```js
+beforeEach(() => {
+    // 每个测试用例运行前执行
+    wrapper = render(generateMenu(defaultProps))
+    //拿到被标记 data-testid="test-menu" 的 DOM 元素(即<ul>)
+    menuElement = wrapper.getByTestId('test-menu')
+    activeElement = wrapper.getByText('active')
+    disabledElement = wrapper.getByText('disabled')
+  })
+```
+
+```js
+test('vertical menu', () => {
+    //清除wrapper渲染的defaultProps，里面也有test-menu所以查找到多个
+    cleanup()
+    const verticalWrapper = render(generateMenu(VerticalProps))
+    const verticalMenuElement = verticalWrapper.getByTestId('test-menu')
+    expect(verticalMenuElement).toHaveClass('menu-vertical')  // 检查默认类名
+  })
+```
+
+### renderChildren
+
+1、**统一处理子元素**
+
+在复杂组件里，`children` 可能有各种类型：`MenuItem`、`SubMenu`、甚至其他 React 元素
+
+如果直接 `{children}` 渲染，可能出现非法元素或渲染错误
+
+`renderChildren` 可以：
+
+- 过滤掉不合法的元素
+- 给每个合法子元素自动加 `index`、`key` 等属性
+
+2、**方便扩展子菜单**
+
+当你增加 `SubMenu` 或动态生成菜单时，不用修改父组件核心渲染逻辑
+
+可以在 `renderChildren` 里做统一逻辑：
+
+- 添加 context
+- 注入 props
+- 做类型检查
+
+3、**保证组件健壮性**
+
+防止开发者传入错误的子元素
+
+比如 `<Menu>123</Menu>`，直接渲染就乱了，用 `renderChildren` 可以过滤掉

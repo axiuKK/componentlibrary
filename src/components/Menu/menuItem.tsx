@@ -36,5 +36,5 @@ const MenuItem = ({
         </li>
     )
 }
-
+MenuItem.displayName = 'MenuItem'
 export default MenuItem

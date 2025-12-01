@@ -11,12 +11,12 @@ const defaultProps: MenuProps = {
   //模拟点击函数，用于测试点击事件是否触发
   onSelect: vi.fn(),
   className: 'test',
-  children: <>test</>,
+  children: <MenuItem index={0}>test</MenuItem>,
 }
 const VerticalProps: MenuProps = {
   defaultIndex: 0,
   mode: 'vertical',
-  children: <>test</>,
+  children:<MenuItem index={0}>test</MenuItem>,
 }
 
 const generateMenu = (props: MenuProps) => {
