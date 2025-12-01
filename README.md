@@ -722,3 +722,31 @@ library.add(fas)
 <Icon icon='arrow-down' theme='danger' size='10x' />
 ```
 
+#### 动态箭头
+
+rotate旋转180°
+
+```js
+&:hover {
+            .arrow-icon {
+                transform: rotate(180deg);
+            }
+        }
+```
+
+对于vertical垂直时取消hover效果，但是点击后箭头会翻转
+
+```js
+&.vertical {//垂直菜单没有hover效果
+            .arrow-icon {
+                transform: rotate(0deg) !important;
+            }
+        }
+
+&.vertical.menu-opened {//垂直菜单打开时箭头旋转180度
+            .arrow-icon {
+                transform: rotate(180deg) !important;
+            }
+        }
+```
+

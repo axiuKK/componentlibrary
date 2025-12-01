@@ -49,17 +49,19 @@
                 transform: rotate(180deg);
             }
         }
+    }
 
-        &.vertical {
-            .arrow-icon {
-                transform: rotate(0deg) !important;
-            }
+    .vertical {
+        //垂直菜单没有hover效果
+        .arrow-icon {
+            transform: rotate(0deg) !important;
         }
+    }
 
-        &.vertical.opened {
-            .arrow-icon {
-                transform: rotate(180deg) !important;
-            }
+    .vertical.menu-opened {
+        //垂直菜单打开时箭头旋转180度
+        .arrow-icon {
+            transform: rotate(180deg) !important;
         }
     }
 
