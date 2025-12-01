@@ -161,4 +161,24 @@ describe('Menu 组件', () => {
       expect(wrapper.getByText('子项1')).not.toBeVisible()
     })   
   })
+  test('vertical submenu hover and click', async () => {
+    cleanup()
+    const verticalWrapper = render(generateMenu(VerticalProps))
+    const verticalMenuElement = verticalWrapper.getByTestId('test-menu')
+    expect(verticalMenuElement).toHaveClass('menu-vertical')  // 检查默认类名
+    const verticalDropdownElement = verticalWrapper.getByText('下拉菜单')
+    expect(verticalDropdownElement).toHaveClass('submenu-title')  // 检查默认类名
+    verticalWrapper.container.appendChild(createStyleFile())
+    expect(verticalWrapper.queryByText('子项1')).not.toBeVisible()
+    //模拟点击事件
+    fireEvent.click(verticalWrapper.getByText('子项1'))
+    await waitFor(() => {
+      expect(defaultProps.onSelect).toHaveBeenCalledWith('4-0')
+    })
+    //模拟再次点击，关闭子菜单
+    fireEvent.click(verticalWrapper.getByText('子项1'))
+    await waitFor(() => {
+      expect(verticalWrapper.getByText('子项1')).not.toBeVisible()
+    })   
+  })
 })
