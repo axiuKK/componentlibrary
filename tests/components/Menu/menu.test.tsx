@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { render, RenderResult, waitFor } from '@testing-library/react'
+import { cleanup, render, RenderResult, waitFor } from '@testing-library/react'
 import Menu from '../../../src/components/Menu/menu'
 import MenuItem from '../../../src/components/Menu/menuItem'
 import '@testing-library/jest-dom/vitest'
@@ -72,6 +72,8 @@ describe('Menu 组件', () => {
 
   })
   test('vertical menu', () => {
+    //清除wrapper渲染的defaultProps，里面也有test-menu所以查找到多个
+    cleanup()
     const verticalWrapper = render(generateMenu(VerticalProps))
     const verticalMenuElement = verticalWrapper.getByTestId('test-menu')
     expect(verticalMenuElement).toHaveClass('menu-vertical')  // 检查默认类名
