@@ -344,3 +344,51 @@ npm install --save-dev @testing-library/jest-dom
 - 适合组件树中少量状态共享，例如：菜单的选中项、主题色、语言切换等。
 - 状态通常由父组件管理（这里的 `Menu`），然后通过 Context 传给子组件。
 - 使用简单，不需要额外依赖。
+
+### 测试发现active没有渲染到className中
+
+active为异步渲染
+
+1、你点击 MenuItem：
+
+```
+const thirdItem = wrapper.getByText('xyz')
+thirdItem.click()
+```
+
+2、MenuItem 内部会调用 `onSelect(index)`：
+
+```
+const handleClick = () => {
+  if (!disabled) onSelect(index)
+}
+```
+
+3、Menu 组件里 `onSelect` 更新 state：
+
+```
+setCurrentActive(index) // React 异步更新
+```
+
+4、React state 更新是 **异步的**，下一轮渲染（re-render）才会触发 MenuItem class 更新：
+
+```
+const classes = classNames('menu-item', {
+  'active': currentActive === index
+})
+```
+
+- 所以在点击事件之后立即检查 `thirdItem.className`，可能还没更新 → 断言失败
+
+### `waitFor`
+
+```js
+await waitFor(() => {
+  expect(wrapper.getByText('xyz')).toHaveClass('active')
+})
+```
+
+- `waitFor` 会循环执行回调，直到：
+  1. 断言通过
+  2. 或者超时
+- 这样就能等待 **React 异步更新完成**，拿到最新的 DOM class

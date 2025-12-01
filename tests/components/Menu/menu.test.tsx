@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { render, RenderResult } from '@testing-library/react'
+import { render, RenderResult, waitFor } from '@testing-library/react'
 import Menu from '../../../src/components/Menu/menu'
 import MenuItem from '../../../src/components/Menu/menuItem'
 import '@testing-library/jest-dom/vitest'
 import { MenuProps } from '../../../src/components/Menu/menu'
 
 const defaultProps: MenuProps = {
+  //index=0，默认选中第一个菜单项
   defaultIndex: 0,
   //模拟点击函数，用于测试点击事件是否触发
   onSelect: vi.fn(),
@@ -21,7 +22,8 @@ const VerticalProps: MenuProps = {
 const generateMenu = (props: MenuProps) => {
   return (
     <Menu {...props}>
-      <MenuItem index={0} active>
+      //index=0,默认选中第一个菜单项,所以为active
+      <MenuItem index={0}>
         active
       </MenuItem>
       <MenuItem index={1} disabled>
@@ -56,14 +58,17 @@ describe('Menu 组件', () => {
     expect(activeElement).toHaveClass('menu-item active')  // 检查默认类名
     expect(disabledElement).toHaveClass('menu-item disabled')  // 检查默认类名
   })
-  test('click menu item', () => {
-    //点击xyz菜单项
-    const thirdItem = wrapper.getByText('xyz')
-    thirdItem.click()
-    //检查是否触发了onSelect函数
+  test('click menu item', async () => {
+    const item = wrapper.getByText('xyz')
+    item.click()
     expect(defaultProps.onSelect).toHaveBeenCalledWith(2)
-    expect(thirdItem).toHaveClass('menu-item active')  // 检查是否添加了 active 类名
-    expect(activeElement).not.toHaveClass('active')  // 检查 active 类名是否从 active 移除
+
+    //waitFor 会循环检查 DOM 更新，直到满足条件
+    await waitFor(() => {
+      expect(wrapper.getByText('xyz')).toHaveClass('active')
+      expect(activeElement).not.toHaveClass('active')  // 检查 active 类名是否从 active 移除
+    })
+
   })
   test('vertical menu', () => {
 
