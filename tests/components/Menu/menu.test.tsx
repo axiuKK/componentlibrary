@@ -142,7 +142,7 @@ describe('Menu 组件', () => {
     //恢复原函数，也就是撤销 spy 的监听
     spy.mockRestore()
   })
-  test('submenu', async () => {
+  test('horizontal submenu hover and click', async () => {
     expect(wrapper.queryByText('子项1')).not.toBeVisible()
     const dropdownElement = wrapper.getByText('下拉菜单')
     //模拟鼠标悬停事件
@@ -150,10 +150,15 @@ describe('Menu 组件', () => {
     await waitFor(() => {
       expect(wrapper.getByText('子项1')).toBeVisible()
     })
+    //模拟点击事件
+    fireEvent.click(wrapper.getByText('子项1'))
+    await waitFor(() => {
+      expect(defaultProps.onSelect).toHaveBeenCalledWith('4-0')
+    })
     //模拟鼠标移出事件
     fireEvent.mouseLeave(dropdownElement)
     await waitFor(() => {
       expect(wrapper.getByText('子项1')).not.toBeVisible()
-    })
+    })   
   })
 })
