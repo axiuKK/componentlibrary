@@ -621,3 +621,36 @@ return (
 
 #### 区分MenuItem和subMenu中的MenuItem的共有index
 
+将index改成string类型
+
+```js
+// 顶层 MenuItem
+<MenuItem index="0" />
+
+// SubMenu
+<SubMenu index="1" title="子菜单">
+    <MenuItem index="1-0" />
+    <MenuItem index="1-1" />
+</SubMenu>
+```
+
+#### 默认展开功能
+
+`defaultOpenSubMenus` 控制初始展开状态
+
+新增menu属性
+
+```js
+defaultOpenSubMenus?: string[];
+```
+
+通过context传给subMenu
+
+```js
+    //排除未定义的defaultOpenSubMenus
+    const opendSubMenus=defaultOpenSubMenus as Array<string>
+    //如果是垂直菜单，且默认打开的子菜单包含当前子菜单索引，那么就设置为打开状态
+    const isOpend = (index&&mode==='vertical') ? opendSubMenus?.includes(index) : false
+    const [menuOpen, setMenuOpen] = useState(isOpend)
+```
+

@@ -12,6 +12,7 @@ export interface MenuProps {
     style?: React.CSSProperties;
     onSelect?: (index: string) => void;
     children: React.ReactNode;
+    defaultOpenSubMenus?: string[];
 }
 
 //context属性种类
@@ -19,6 +20,7 @@ interface IMenuContext {
     index: string;
     onSelect: (index: string) => void;
     mode?: MenuMode;
+    defaultOpenSubMenus?: string[];
 }
 
 //context默认值
@@ -26,6 +28,7 @@ export const MenuContext = createContext<IMenuContext>({
     index: '0',
     onSelect: () => { },
     mode: 'horizontal',
+    defaultOpenSubMenus: [],
 })
 
 const Menu = ({
@@ -35,6 +38,7 @@ const Menu = ({
     style = {},
     onSelect = () => { },
     children,
+    defaultOpenSubMenus = [],
 }: MenuProps) => {
     const [currentActive, setCurrentActive] = useState(defaultIndex)
     //实际传入的值
@@ -46,6 +50,7 @@ const Menu = ({
             alert(index)
         },
         mode: mode,
+        defaultOpenSubMenus: defaultOpenSubMenus,
     }
 
     const classes = classNames('menu', className, {

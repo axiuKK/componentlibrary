@@ -17,8 +17,12 @@ const SubMenu = ({
     className = '',
     children,
 }: SubMenuProps) => {
-    const { index: currentActive, mode } = useContext(MenuContext)
-    const [menuOpen, setMenuOpen] = useState(false)
+    const { index: currentActive, mode, defaultOpenSubMenus } = useContext(MenuContext)
+    //排除未定义的defaultOpenSubMenus
+    const opendSubMenus=defaultOpenSubMenus as Array<string>
+    //如果是垂直菜单，且默认打开的子菜单包含当前子菜单索引，那么就设置为打开状态
+    const isOpend = (index&&mode==='vertical') ? opendSubMenus?.includes(index) : false
+    const [menuOpen, setMenuOpen] = useState(isOpend)
 
     const classes = classNames('submenu', className, {
         'active': index === currentActive,
@@ -54,7 +58,7 @@ const SubMenu = ({
             if (typeof childElement.type === 'function') {
                 const type = childElement.type as { displayName?: string }
                 if (type.displayName === 'MenuItem') {
-                    return React.cloneElement(childElement, {                       
+                    return React.cloneElement(childElement, {
                         index: `${index}-${i}`,
                     })
                 } else {
