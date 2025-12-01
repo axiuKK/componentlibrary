@@ -657,3 +657,68 @@ defaultOpenSubMenus?: string[];
 #### 测试
 
 先修改index为string导致的错误
+
+测试组件的展开（隐藏与显示）
+
+```js
+// 在测试环境里动态创建一段 CSS，用于控制 SubMenu 默认隐藏
+const createStyleFile = () => {
+  const cssFile: string = `
+    .submenu{
+      display: none;
+    }
+    .menu-opened{
+      display: block;
+    }
+  `
+  const style = document.createElement('style')
+  style.innerHTML = cssFile
+  return style
+}
+```
+
+```js
+wrapper.container.appendChild(createStyleFile())
+```
+
+使用异步实现
+
+```js
+test('horizontal submenu hover and click', async () => {
+    expect(wrapper.queryByText('子项1')).not.toBeVisible()
+    const dropdownElement = wrapper.getByText('下拉菜单')
+    //模拟鼠标悬停事件
+    fireEvent.mouseEnter(dropdownElement)
+    await waitFor(() => {
+      expect(wrapper.getByText('子项1')).toBeVisible()
+    })
+    //模拟点击事件
+    fireEvent.click(wrapper.getByText('子项1'))
+    await waitFor(() => {
+      expect(defaultProps.onSelect).toHaveBeenCalledWith('4-0')
+    })
+    //模拟鼠标移出事件
+    fireEvent.mouseLeave(dropdownElement)
+    await waitFor(() => {
+      expect(wrapper.getByText('子项1')).not.toBeVisible()
+    })   
+  })
+```
+
+### Icon
+
+从fontawesome导入后加入library
+
+```js
+import Icon from './components/Icon/icon'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas)
+```
+
+使用后出现一个向下箭头
+
+```js
+<Icon icon='arrow-down' theme='danger' size='10x' />
+```
+

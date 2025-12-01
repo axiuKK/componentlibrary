@@ -2,11 +2,16 @@ import Button from './components/Button/button'
 import Menu from './components/Menu/menu'
 import MenuItem from './components/Menu/menuItem'
 import SubMenu from './components/Menu/subMenu'
+import Icon from './components/Icon/icon'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas)
 
 function App() {
 
   return (
     <>
+      <Icon icon='arrow-down' theme='danger' size='10x' />
       <Menu mode="vertical" defaultIndex="0" onSelect={(index) => console.log(index)} defaultOpenSubMenus={['3']}>
         <MenuItem>首页</MenuItem>
         <MenuItem disabled>关于</MenuItem>
