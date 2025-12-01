@@ -48,7 +48,7 @@ const Menu = ({
 
     return (
         <MenuContext.Provider value={passedContext}>
-            <ul className={classes} style={style}>
+            <ul className={classes} style={style} data-testid="test-menu">
                 {children}
             </ul>
         </MenuContext.Provider>
