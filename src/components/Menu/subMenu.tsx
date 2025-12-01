@@ -29,21 +29,24 @@ const SubMenu = ({
         e.stopPropagation()
         setMenuOpen(!menuOpen)
     }
+    //处理hover
     let timer: any
-    const handleMouse=(e:React.MouseEvent,toggle:boolean)=>{
+    const handleMouse = (e: React.MouseEvent, toggle: boolean) => {
         clearTimeout(timer)
         e.stopPropagation()
-        timer=setTimeout(()=>{
+        timer = setTimeout(() => {
             setMenuOpen(toggle)
-        },300)
+        }, 300)
     }
-    const clickEvents=mode==='vertical'?{
-        onClick:handleClick,
-    }:{}
-    const mouseEvents=mode!=='vertical'?{
-        onMouseEnter:(e:React.MouseEvent)=>handleMouse(e,true),
-        onMouseLeave:(e:React.MouseEvent)=>handleMouse(e,false),
-    }:{}
+    //click
+    const clickEvents = mode === 'vertical' ? {
+        onClick: handleClick,
+    } : {}
+    //hover
+    const mouseEvents = mode !== 'vertical' ? {
+        onMouseEnter: (e: React.MouseEvent) => handleMouse(e, true),
+        onMouseLeave: (e: React.MouseEvent) => handleMouse(e, false),
+    } : {}
 
     const renderChildren = () => {
         return React.Children.map(children, (child, index) => {
