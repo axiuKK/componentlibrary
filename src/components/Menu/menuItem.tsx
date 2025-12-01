@@ -3,7 +3,7 @@ import { MenuContext } from "./menu";
 import { useContext } from "react";
 
 export interface MenuItemProps {
-    index: number;
+    index?: number;
     disabled?: boolean;
     className?: string;
     style?: React.CSSProperties;
@@ -26,7 +26,9 @@ const MenuItem = ({
     const handleClick = () => {
         if (!disabled) {
             //调用函数，更新active索引值
-            onSelect(index)
+            if (index !== undefined) {
+                onSelect(index)
+            }
         }
     }
 

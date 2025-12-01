@@ -59,7 +59,7 @@ const Menu = ({
             if (typeof childElement.type === 'function') {
                 const type = childElement.type as { displayName?: string }
                 const displayName = type.displayName
-                if (displayName === 'MenuItem') {
+                if (displayName === 'MenuItem' || displayName === 'SubMenu') {
                     //给menuitem自动添加index属性
                     const indexProp = childElement.props.index ?? index;
                     return React.cloneElement(childElement, { index: indexProp });

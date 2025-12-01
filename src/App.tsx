@@ -1,16 +1,20 @@
 import Button from './components/Button/button'
 import Menu from './components/Menu/menu'
 import MenuItem from './components/Menu/menuItem'
+import SubMenu from './components/Menu/subMenu'
 
 function App() {
 
   return (
     <>
       <Menu mode="vertical" defaultIndex={0} onSelect={(index) => console.log(index)}>
-        <MenuItem index={0}>首页</MenuItem>
-        <MenuItem index={1} disabled>关于</MenuItem>
-        <MenuItem index={2}>联系</MenuItem>
-        <li>123</li>
+        <MenuItem>首页</MenuItem>
+        <MenuItem disabled>关于</MenuItem>
+        <MenuItem >联系</MenuItem>
+        <SubMenu title="下拉菜单">
+          <MenuItem>子项1</MenuItem>
+          <MenuItem>子项2</MenuItem>
+        </SubMenu>
       </Menu>
       <Button>默认按钮</Button>
       <Button btnType="primary" disabled>主按钮</Button>
