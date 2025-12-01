@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <Menu mode="horizontal" defaultIndex={0} onSelect={(index) => console.log(index)}>
+      <Menu mode="horizontal" defaultIndex="0" onSelect={(index) => console.log(index)}>
         <MenuItem>首页</MenuItem>
         <MenuItem disabled>关于</MenuItem>
         <MenuItem >联系</MenuItem>

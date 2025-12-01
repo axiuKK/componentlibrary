@@ -576,3 +576,48 @@ if (displayName === 'MenuItem') {
 修改样式css--很难
 
 #### 下拉菜单的open
+
+在menu组件的context中传入mode判断是垂直还是水平
+
+```js
+//传入context
+const { index: currentActive, mode } = useContext(MenuContext)
+
+//处理hover
+    let timer: any
+    const handleMouse = (e: React.MouseEvent, toggle: boolean) => {
+        clearTimeout(timer)
+        e.stopPropagation()
+        timer = setTimeout(() => {
+            setMenuOpen(toggle)
+        }, 300)
+    }
+    //click
+    const clickEvents = mode === 'vertical' ? {
+        onClick: handleClick,
+    } : {}
+    //hover
+    const mouseEvents = mode !== 'vertical' ? {
+        onMouseEnter: (e: React.MouseEvent) => handleMouse(e, true),
+        onMouseLeave: (e: React.MouseEvent) => handleMouse(e, false),
+    } : {}
+```
+
+绑定事件
+
+```js
+return (
+        <li key={index} className='submenu-item' {...mouseEvents}>
+            <div className='submenu-title' {...clickEvents}>
+                {title}
+            </div>
+
+            <ul className={classes}>
+                {renderChildren()}
+            </ul>
+        </li>
+    )
+```
+
+#### 区分MenuItem和subMenu中的MenuItem的共有index
+

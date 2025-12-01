@@ -3,7 +3,7 @@ import { MenuContext } from "./menu";
 import { useContext } from "react";
 
 export interface MenuItemProps {
-    index?: number;
+    index?: string;
     disabled?: boolean;
     className?: string;
     style?: React.CSSProperties;

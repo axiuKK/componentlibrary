@@ -6,30 +6,30 @@ type MenuMode = 'horizontal' | 'vertical'
 
 export interface MenuProps {
     //active菜单的索引值
-    defaultIndex?: number;
+    defaultIndex?: string;
     className?: string;
     mode?: MenuMode;
     style?: React.CSSProperties;
-    onSelect?: (index: number) => void;
+    onSelect?: (index: string) => void;
     children: React.ReactNode;
 }
 
 //context属性种类
 interface IMenuContext {
-    index: number;
-    onSelect: (index: number) => void;
+    index: string;
+    onSelect: (index: string) => void;
     mode?: MenuMode;
 }
 
 //context默认值
 export const MenuContext = createContext<IMenuContext>({
-    index: 0,
+    index: '0',
     onSelect: () => { },
     mode: 'horizontal',
 })
 
 const Menu = ({
-    defaultIndex = 0,
+    defaultIndex = '0',
     className = '',
     mode = 'horizontal',
     style = {},
@@ -68,7 +68,7 @@ const Menu = ({
                 if (displayName === 'MenuItem' || displayName === 'SubMenu') {
                     //给menuitem自动添加index属性
                     const indexProp = childElement.props.index ?? index;
-                    return React.cloneElement(childElement, { index: indexProp });
+                    return React.cloneElement(childElement, { index: indexProp.toString() });
                 } else {
                     console.error('Menu children must be MenuItem')
                     return null

@@ -5,7 +5,7 @@ import React from "react";
 import type { MenuItemProps } from "./menuItem";
 
 export interface SubMenuProps {
-    index?: number;
+    index?: string;
     title: string;
     className?: string;
     children: React.ReactNode;
@@ -49,13 +49,13 @@ const SubMenu = ({
     } : {}
 
     const renderChildren = () => {
-        return React.Children.map(children, (child, index) => {
+        return React.Children.map(children, (child, i) => {
             const childElement = child as React.ReactElement<MenuItemProps>
             if (typeof childElement.type === 'function') {
                 const type = childElement.type as { displayName?: string }
                 if (type.displayName === 'MenuItem') {
-                    return React.cloneElement(childElement, {
-                        index: index,
+                    return React.cloneElement(childElement, {                       
+                        index: `${index}-${i}`,
                     })
                 } else {
                     console.error('子菜单只能包含MenuItem组件')
