@@ -4,6 +4,7 @@ import Menu from '../../../src/components/Menu/menu'
 import MenuItem from '../../../src/components/Menu/menuItem'
 import '@testing-library/jest-dom/vitest'
 import { MenuProps } from '../../../src/components/Menu/menu'
+import Button from '../../../src/components/Button/button'
 
 const defaultProps: MenuProps = {
   //index=0，默认选中第一个菜单项
@@ -16,7 +17,7 @@ const defaultProps: MenuProps = {
 const VerticalProps: MenuProps = {
   defaultIndex: 0,
   mode: 'vertical',
-  children:<MenuItem index={0}>test</MenuItem>,
+  children: <MenuItem index={0}>test</MenuItem>,
 }
 
 const generateMenu = (props: MenuProps) => {
@@ -32,6 +33,25 @@ const generateMenu = (props: MenuProps) => {
       <MenuItem index={2}>
         xyz
       </MenuItem>
+    </Menu>
+  )
+}
+
+const wrongMenu = (props: MenuProps) => {
+  return (
+    <Menu {...props}>
+      //index=0,默认选中第一个菜单项,所以为active
+      <MenuItem index={0}>
+        active
+      </MenuItem>
+      <MenuItem index={1} disabled>
+        disabled
+      </MenuItem>
+      <MenuItem index={2}>
+        xyz
+      </MenuItem>
+      <li>123</li>//HTML
+      <Button>默认按钮</Button>//不是menuItem组件
     </Menu>
   )
 }
@@ -77,5 +97,19 @@ describe('Menu 组件', () => {
     const verticalWrapper = render(generateMenu(VerticalProps))
     const verticalMenuElement = verticalWrapper.getByTestId('test-menu')
     expect(verticalMenuElement).toHaveClass('menu-vertical')  // 检查默认类名
+  })
+  test('wrong children', () => {
+    cleanup()
+    const spy = vi.spyOn(console, 'error')//监听console函数
+    const wrongWrapper = render(wrongMenu(defaultProps))
+    const wrongMenuElement = wrongWrapper.getByTestId('test-menu')
+    expect(wrongMenuElement).toBeTruthy()  // 检查是否渲染了 children
+    //li被过滤，只渲染menuItem
+    expect(wrongMenuElement.getElementsByTagName('li').length).toBe(3)
+
+    expect(spy).toHaveBeenCalledWith('Menu children must be function component')
+    expect(spy).toHaveBeenCalledWith('Menu children must be MenuItem')
+    //恢复原函数，也就是撤销 spy 的监听
+    spy.mockRestore()
   })
 })

@@ -10,6 +10,7 @@ function App() {
         <MenuItem index={0}>首页</MenuItem>
         <MenuItem index={1} disabled>关于</MenuItem>
         <MenuItem index={2}>联系</MenuItem>
+        <li>123</li>
       </Menu>
       <Button>默认按钮</Button>
       <Button btnType="primary" disabled>主按钮</Button>

@@ -444,3 +444,72 @@ test('vertical menu', () => {
 防止开发者传入错误的子元素
 
 比如 `<Menu>123</Menu>`，直接渲染就乱了，用 `renderChildren` 可以过滤掉
+
+```js
+const renderChildren = () => {
+        //React.Children 是 React 提供的一个工具对象，专门用来操作组件的 children 属性
+        return React.Children.map(children, (child, index) => {
+            //child 是一个 React 元素，它的 props 类型是 MenuItemProps
+            const childElement = child as React.ReactElement<MenuItemProps>
+            //类型保护，判断childElement.type是否为函数组件
+            // type 可能是：
+            // HTML 标签（'div'、'ul'） → 没有 displayName
+            // React 组件（函数组件、class组件） → 有 displayName
+            if (typeof childElement.type === 'function') {
+                const type = childElement.type as { displayName?: string }
+                const displayName = type.displayName
+                if (displayName === 'MenuItem') {
+                    return child
+                } else {
+                    console.error('Menu children must be MenuItem')
+                    return null
+                }
+            } else {
+                console.error('Menu children must be function component')
+                return null
+            }
+        })
+    }
+```
+
+在menuItems中定义了displayName
+
+```js
+MenuItem.displayName = 'MenuItem'
+```
+
+测试（浏览器中）：
+
+```js
+<Menu mode="vertical" defaultIndex={0} onSelect={(index) => console.log(index)}>
+        <MenuItem index={0}>首页</MenuItem>
+        <MenuItem index={1} disabled>关于</MenuItem>
+        <MenuItem index={2}>联系</MenuItem>
+        <li>123</li> 
+        //输入不合法字符
+</Menu>
+```
+
+![image-20251201155803049](assets/image-20251201155803049.png)
+
+有报错
+
+测试（文件中）：
+
+Vitest 测试：默认console.log被拦截，需要 `spyOn` 才能捕获。
+
+`spy`（间谍）本质上就是“监听一个函数被调用的情况”，你可以检查：
+
+- 函数是否被调用
+- 调用次数
+- 调用参数
+
+```js
+const spy = vi.spyOn(console, 'error')//监听console函数
+
+expect(spy).toHaveBeenCalledWith('Menu children must be function component')
+expect(spy).toHaveBeenCalledWith('Menu children must be MenuItem')
+//恢复原函数，也就是撤销 spy 的监听
+spy.mockRestore()
+```
+
