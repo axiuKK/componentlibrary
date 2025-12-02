@@ -902,3 +902,40 @@ CSSTransition
 @include m.zoom-animation('right', scaleX(0), scaleX(1), center right);
 ```
 
+## Storybook
+
+Storybook 是一个 **组件开发环境**，可以：
+
+- 单独开发和调试 React/Vue/Angular 组件，不依赖整个应用
+- 给每个组件写“故事（stories）”，展示不同状态
+- 集成文档、测试和可访问性检查
+
+简单说，它就是给你组件做一个 **独立的展示和调试工具箱**。
+
+一个story记录了组件的一种渲染状态，同样类型的story放在一组，比如Button就是stories
+
+![image-20251202202110610](assets/image-20251202202110610.png)
+
+```js
+import { Button } from './button'
+import { type Meta, type StoryObj } from '@storybook/react'
+
+//Meta<组件类型> 定义了组件的元数据，包括标题、组件类型等
+const buttonMeta: Meta<typeof Button> = {
+    title: 'Button',
+    component: Button,
+}
+
+export default buttonMeta
+
+//StoryObj<组件类型> 定义了组件的故事对象，包括参数、渲染函数等
+type Story = StoryObj<typeof Button>
+
+export const Default: Story = {
+    args: {
+        children: 'Button',
+    },
+}
+```
+
+`Meta` 是组件档案， `Story` 是组件用法快照，`args` 就是 props
