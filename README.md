@@ -916,6 +916,8 @@ Storybook 是一个 **组件开发环境**，可以：
 
 ![image-20251202202110610](assets/image-20251202202110610.png)
 
+### 编写stories文件
+
 ```js
 import { Button } from './button'
 import { type Meta, type StoryObj } from '@storybook/react'
@@ -932,6 +934,7 @@ export default buttonMeta
 type Story = StoryObj<typeof Button>
 
 export const Default: Story = {
+    name: 'Default Button',
     args: {
         children: 'Button',
     },
@@ -939,3 +942,17 @@ export const Default: Story = {
 ```
 
 `Meta` 是组件档案， `Story` 是组件用法快照，`args` 就是 props
+
+### 配置样式
+
+preview.js是 **Storybook 的“全局配置文件”**，给所有 stories 设置“公共规则 & 公共样式 & 公共装饰器”。
+
+/storybook/preview.js
+
+```js
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas)
+import '../src/styles/index.scss'
+```
+
