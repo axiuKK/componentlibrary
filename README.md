@@ -943,7 +943,7 @@ export const Default: Story = {
 
 `Meta` 是组件档案， `Story` 是组件用法快照，`args` 就是 props
 
-### 配置样式
+#### 配置样式
 
 preview.js是 **Storybook 的“全局配置文件”**，给所有 stories 设置“公共规则 & 公共样式 & 公共装饰器”。
 
@@ -954,5 +954,21 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 library.add(fas)
 import '../src/styles/index.scss'
+```
+
+#### 模板
+
+```js
+//模板
+const Template = (args: React.ComponentProps<typeof Button>) => (
+  <Button {...args} />
+)
+
+export const Default: Story = {
+  render: Template,
+  args: {
+    children: 'Default Button',
+  },
+}
 ```
 
