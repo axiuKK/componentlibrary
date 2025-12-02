@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-      <Menu mode="vertical" defaultIndex="0" onSelect={(index) => console.log(index)} defaultOpenSubMenus={['3']}>
+      <Menu mode="horizontal" defaultIndex="0" onSelect={(index) => console.log(index)} defaultOpenSubMenus={['3']}>
         <MenuItem>首页</MenuItem>
         <MenuItem disabled>关于</MenuItem>
         <MenuItem >联系</MenuItem>

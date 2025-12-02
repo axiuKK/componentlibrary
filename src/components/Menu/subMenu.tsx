@@ -4,6 +4,7 @@ import { MenuContext } from "./menu";
 import React from "react";
 import type { MenuItemProps } from "./menuItem";
 import Icon from "../Icon/icon";
+import { CSSTransition } from 'react-transition-group'
 
 export interface SubMenuProps {
     index?: string;
@@ -20,9 +21,9 @@ const SubMenu = ({
 }: SubMenuProps) => {
     const { index: currentActive, mode, defaultOpenSubMenus } = useContext(MenuContext)
     //排除未定义的defaultOpenSubMenus
-    const opendSubMenus=defaultOpenSubMenus as Array<string>
+    const opendSubMenus = defaultOpenSubMenus as Array<string>
     //如果是垂直菜单，且默认打开的子菜单包含当前子菜单索引，那么就设置为打开状态
-    const isOpend = (index&&mode==='vertical') ? opendSubMenus?.includes(index) : false
+    const isOpend = (index && mode === 'vertical') ? opendSubMenus?.includes(index) : false
     const [menuOpen, setMenuOpen] = useState(isOpend)
 
     const classes = classNames('submenu', className, {
@@ -30,7 +31,7 @@ const SubMenu = ({
         'active': index === currentActive,
     })
 
-    const submenuItemclasses=classNames('submenu-item','',{
+    const submenuItemclasses = classNames('submenu-item', '', {
         'menu-opened': menuOpen,
         'vertical': mode === 'vertical',
     })
@@ -86,9 +87,16 @@ const SubMenu = ({
                 <Icon icon='angle-down' className='arrow-icon' />
             </div>
 
-            <ul className={classes}>
-                {renderChildren()}
-            </ul>
+            <CSSTransition
+                in={menuOpen}
+                timeout={300}
+                classNames='zoom-in-top'
+                appear
+            >
+                <ul className={classes}>
+                    {renderChildren()}
+                </ul>
+            </CSSTransition>
         </li>
     )
 }

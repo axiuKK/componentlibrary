@@ -736,6 +736,8 @@ rotate旋转180°
 
 对于vertical垂直时取消hover效果，但是点击后箭头会翻转
 
+但是失败
+
 ```js
 &.vertical {//垂直菜单没有hover效果
             .arrow-icon {
@@ -748,5 +750,30 @@ rotate旋转180°
                 transform: rotate(180deg) !important;
             }
         }
+```
+
+由于渲染时要renderChildren，所以将classes放在ul上
+
+但是这样就无法通过.vertical的className控制.arrow-icon
+
+所以又新建了一个submenuItemclasses传入vertical
+
+```js
+<li key={index} className={submenuItemclasses} {...mouseEvents}>
+            <div className='submenu-title' {...clickEvents}>
+                {title}
+                <Icon icon='angle-down' className='arrow-icon' />
+            </div>
+
+            <ul className={classes}>
+                {renderChildren()}
+            </ul>
+        </li>
+```
+
+### 下拉菜单栏动画
+
+```js
+import {CSSTransition} from 'react-transition-group'
 ```
 
