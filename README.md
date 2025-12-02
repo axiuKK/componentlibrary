@@ -705,7 +705,7 @@ test('horizontal submenu hover and click', async () => {
   })
 ```
 
-### Icon
+## Icon
 
 从fontawesome导入后加入library
 
@@ -722,7 +722,7 @@ library.add(fas)
 <Icon icon='arrow-down' theme='danger' size='10x' />
 ```
 
-#### 动态箭头
+### 动态箭头
 
 rotate旋转180°
 
@@ -883,5 +883,22 @@ CSSTransition
             //display: block;
         }
     }
+```
+
+## 封装成Transition组件
+
+### 封装css
+
+在 Sass 里，`@mixin` 是 **可复用的样式模板**
+
+在`_mixins.scss` → 只放模板，在`_animation.scss` → 生成实际动画类
+
+```js
+@use './mixin' as m;
+
+@include m.zoom-animation('top', scaleY(0), scaleY(1), center top);
+@include m.zoom-animation('bottom', scaleY(0), scaleY(1), center bottom);
+@include m.zoom-animation('left', scaleX(0), scaleX(1), center left);
+@include m.zoom-animation('right', scaleX(0), scaleX(1), center right);
 ```
 
