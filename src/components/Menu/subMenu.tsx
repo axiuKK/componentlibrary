@@ -4,7 +4,8 @@ import { MenuContext } from "./menu";
 import React from "react";
 import type { MenuItemProps } from "./menuItem";
 import Icon from "../Icon/icon";
-import { CSSTransition } from 'react-transition-group'
+import { CSSTransition } from 'react-transition-group';
+import Transition from "../Transition/transition";
 
 export interface SubMenuProps {
     index?: string;
@@ -88,18 +89,18 @@ const SubMenu = ({
                 <Icon icon='angle-down' className='arrow-icon' />
             </div>
 
-            <CSSTransition
+            <Transition
                 in={menuOpen}
                 timeout={300}
-                classNames='zoom-in-top'
-                appear
-                nodeRef={nodeRef} 
-                unmountOnExit 
+                animation='zoom-in-top'
+                appear={true}
+                unmountOnExit={true}
+                nodeRef={nodeRef as unknown as React.Ref<undefined>}
             >
                 <ul ref={nodeRef} className={classes}>
                     {renderChildren()}
                 </ul>
-            </CSSTransition>
+            </Transition>
         </li>
     )
 }
