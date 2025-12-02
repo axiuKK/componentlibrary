@@ -21,6 +21,10 @@ interface BaseButtonProps {
 type NativeButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 type AnchorButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
 export type ButtonProps = BaseButtonProps & Partial<NativeButtonProps & AnchorButtonProps>;
+/**
+ * 页面中最常用的按钮元素，适合于完成特定的交互，支持HTML button和a链接的所有属性
+ */
+
 
 //对BaseButtonProps解构props
 export const Button = ({

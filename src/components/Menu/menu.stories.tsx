@@ -5,7 +5,13 @@ import SubMenu from './subMenu';
 
 const menuMeta: Meta<typeof Menu> = {
     title: 'menu',
-    component: Menu
+    component: Menu,
+    //子组件信息
+    subcomponents: {
+      Item: MenuItem,
+      SubMenu,
+    },
+    tags: ['autodocs']
 }
 
 export default menuMeta

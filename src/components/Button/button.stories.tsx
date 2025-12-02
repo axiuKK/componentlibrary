@@ -5,6 +5,8 @@ import { type Meta, type StoryObj } from '@storybook/react'
 const buttonMeta: Meta<typeof Button> = {
     title: 'Button',
     component: Button,
+    //启用自动文档
+    tags: ['autodocs']
 }
 
 export default buttonMeta

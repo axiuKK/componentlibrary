@@ -918,6 +918,8 @@ Storybook 是一个 **组件开发环境**，可以：
 
 ### 编写stories文件
 
+一定要启动自动文档doc
+
 ```js
 import { Button } from './button'
 import { type Meta, type StoryObj } from '@storybook/react'
@@ -926,6 +928,8 @@ import { type Meta, type StoryObj } from '@storybook/react'
 const buttonMeta: Meta<typeof Button> = {
     title: 'Button',
     component: Button,
+    //启用自动文档
+    tags: ['autodocs']
 }
 
 export default buttonMeta
@@ -972,3 +976,28 @@ export const Default: Story = {
 }
 ```
 
+#### 子组件
+
+```js
+const menuMeta: Meta<typeof Menu> = {
+    title: 'menu',
+    component: Menu,
+    //子组件信息
+    subcomponents: {
+      Item: MenuItem,
+      SubMenu,
+    },
+}
+```
+
+![image-20251203005920725](assets/image-20251203005920725.png)
+
+#### 在button.tsx中添加注释可以在doc中显示
+
+```js
+/**
+ * 页面中最常用的按钮元素，适合于完成特定的交互，支持HTML button和a链接的所有属性
+ */
+```
+
+![image-20251203005907735](assets/image-20251203005907735.png)
