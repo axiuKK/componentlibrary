@@ -777,3 +777,111 @@ rotate旋转180°
 import {CSSTransition} from 'react-transition-group'
 ```
 
+```js
+.zoom-in-top-enter {
+    opacity: 0;
+    transform: scaleY(0);
+}
+
+.zoom-in-top-enter-active {
+    opacity: 1;
+    transform: scaleY(1);
+    transition: transform 300ms cubic-bezier(0.23,1,0.32,1) 100ms, opacity 300ms cubic-bezier(0.23,1,0.32,1);
+    transform-origin: center top;
+}
+
+.zoom-in-top-exit {
+    opacity: 1;
+}
+
+.zoom-in-top-exit-active {
+    opacity: 0;
+    transform: scaleY(0);
+    transition: transform 300ms cubic-bezier(0.23,1,0.32,1) 100ms, opacity 300ms cubic-bezier(0.23,1,0.32,1);
+    transform-origin: center top;
+}
+```
+
+#### 兼容问题
+
+React 18+ 开始，`findDOMNode` 已经被移除， `react-transition-group` 内部还在偷偷用ReactDOM.findDOMNode(this)
+
+用 `nodeRef` 彻底绕开 findDOMNode，nodeRef` 替代 `findDOMNode
+
+```js
+const nodeRef = useRef<HTMLUListElement>(null)
+
+<CSSTransition
+  in={open}
+  timeout={300}
+  classNames="zoom-in-top"
+  unmountOnExit
+  nodeRef={nodeRef}        // ✅ 关键
+>
+  <ul ref={nodeRef} className="submenu">//noderef
+    {renderChildren()}
+  </ul>
+</CSSTransition>
+```
+
+CSSTransition
+   |
+   |—— 内部调用 findDOMNode(this)  ❌
+
+你 -> useRef() -> DOM 节点 -> nodeRef -> CSSTransition✅
+
+#### 只有显示动画没有离开特效
+
+离开时css中设置为display：none，`display` 是 **不可动画的属性**。
+
+添加unmountOnExit属性等 *离场动画播完* 再把 DOM 从页面中删除
+
+```js
+<CSSTransition
+                in={menuOpen}
+                timeout={300}
+                classNames='zoom-in-top'
+                appear
+                nodeRef={nodeRef} 
+                unmountOnExit //
+            >
+```
+
+在未点击时不渲染节点
+
+![image-20251202181126720](assets/image-20251202181126720.png)
+
+点击后才渲染
+
+![image-20251202181149726](assets/image-20251202181149726.png)
+
+现在可以注释掉display：none代码
+
+```js
+.submenu {
+        list-style: none;
+        padding-left: 0;
+        white-space: nowrap;
+        min-width: 100%;
+        //display: none;
+
+        >.menu-item {
+            padding: vars.$menu-item-padding-y vars.$menu-item-padding-x;
+            cursor: pointer;
+            transition: vars.$menu-transition;
+            color: vars.$body-color;
+            width: 100%;
+            margin-left: 10px;
+
+            &:hover,
+            &.active {
+                color: vars.$menu-item-active-color !important;
+            }
+        }
+
+        &.menu-opened {
+            //display: block;
+        }
+    }
+```
+

@@ -70,7 +70,7 @@
         padding-left: 0;
         white-space: nowrap;
         min-width: 100%;
-        display: none;
+        //display: none;
 
         >.menu-item {
             padding: vars.$menu-item-padding-y vars.$menu-item-padding-x;
@@ -86,9 +86,9 @@
             }
         }
 
-        &.menu-opened {
-            display: block;
-        }
+        // &.menu-opened {
+        //     //display: block;
+        // }
     }
 }
 

@@ -94,6 +94,7 @@ const SubMenu = ({
                 classNames='zoom-in-top'
                 appear
                 nodeRef={nodeRef} 
+                unmountOnExit 
             >
                 <ul ref={nodeRef} className={classes}>
                     {renderChildren()}
