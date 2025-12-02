@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { MenuContext } from "./menu";
 import React from "react";
 import type { MenuItemProps } from "./menuItem";
@@ -80,6 +80,7 @@ const SubMenu = ({
         })
     }
 
+    const nodeRef = useRef<HTMLUListElement>(null)
     return (
         <li key={index} className={submenuItemclasses} {...mouseEvents}>
             <div className='submenu-title' {...clickEvents}>
@@ -92,8 +93,9 @@ const SubMenu = ({
                 timeout={300}
                 classNames='zoom-in-top'
                 appear
+                nodeRef={nodeRef} 
             >
-                <ul className={classes}>
+                <ul ref={nodeRef} className={classes}>
                     {renderChildren()}
                 </ul>
             </CSSTransition>
