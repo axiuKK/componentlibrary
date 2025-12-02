@@ -21,22 +21,22 @@ export const Default: Story = {
 
 export const ButtonWithType: Story = {
     name: 'Button with Type',
-    render: () => (
+    render: (args) => (
     <div style={{ display: 'flex', gap: 12 }}>
-      <Button btnType='primary'>Primary Button</Button>
-      <Button btnType='danger'>Danger Button</Button>
-      <Button btnType='link'>Link Button</Button>
+      <Button {...args} btnType="primary">Primary Button</Button>
+      <Button {...args} btnType="danger">Danger Button</Button>
+      <Button {...args} btnType="link">Link Button</Button>
     </div>
-    )
+    ),
 }
 
 export const ButtonWithSize: Story = {
     name: 'Button with Size',
-    render: () => (
+    render: (args) => (
     <div style={{ display: 'flex', gap: 12 }}>
-      <Button size='lg'>Large Button</Button>
-      <Button>Default Button</Button>
-      <Button size='sm'>Small Button</Button>
+      <Button {...args} size="lg">Large Button</Button>
+      <Button {...args}>Default Button</Button>
+      <Button {...args} size="sm">Small Button</Button>
     </div>
     )
 }
