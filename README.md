@@ -1085,3 +1085,24 @@ export default defineConfig({
 由于在transition中把submenu组件改成先开始不渲染，在click/hover后才渲染，所以在测试中查看子项的都出错了
 
 把未渲染时对子组件的测试都删除即可，在渲染后添加
+
+## AutoComplete
+
+### 过滤筛选
+
+直接使用filter
+
+```js
+data.filter(item => item.includes(keyword))
+```
+
+但如果有很多数据，会导致浏览器内存爆炸、页面卡死等
+
+所以不在前端处理数据，而是让服务器筛选
+
+fetch实时请求
+
+```js
+fetch(`url?keyword=${keyword}`)//异步
+```
+
