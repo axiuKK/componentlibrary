@@ -1187,12 +1187,56 @@ const handleSelect = (item: string) => {
     }
 ```
 
-自定义菜单样式，添加renderOptionshu'x
+#### 自定义菜单样式，添加renderOption属性
 
 ```js
 //存在renderOption则使用renderOption渲染，否则直接渲染item
     const renderTemplate = (item: string) => {
         return renderOption ? renderOption(item) : item
     }
+```
+
+只能定义菜单为string类型，所以将string改成对象类型
+
+由于不知道传入的参数类型，采用T泛型
+
+```js
+interface DataSourceObject {
+    value: string
+}
+export type DataSourceType<T = {}> = T & DataSourceObject
+```
+
+同时要更改AutoCojmpleteProps为泛型（即传入T）
+
+否则属性里的item还是为DataSourceObject而不是DataSourceType，因为T默认值为{}
+
+```js
+export interface AutoCompleteProps<T={}> extends Omit<InputProps, 'onSelect'> {
+    // 过滤筛选，fetch异步
+    fetchSuggestions: (str: string) => Promise<DataSourceType<T>[]>
+    onSelect?: (item: DataSourceType<T>) => void
+    renderOption?: (item: DataSourceType<T>) => ReactNode
+}
+```
+
+在story中也要明确传入参数的类型
+
+```js
+const lakersWithNumber = [
+    { value: 'bradley', number: 11 },
+    { value: 'pope', number: 1 },
+    { value: 'caruso', number: 4 },
+    { value: 'cook', number: 2 },
+    { value: 'cousins', number: 15 },
+    { value: 'james', number: 23 },
+    { value: 'AD', number: 3 },
+    { value: 'green', number: 14 },
+    { value: 'howard', number: 39 },
+    { value: 'kuzma', number: 0 },
+]
+
+//AutoComplete现在是泛型，必须传入T明确数据源的类型
+export const Default: StoryObj<typeof AutoComplete<{ number: number }>> = {
 ```
 
