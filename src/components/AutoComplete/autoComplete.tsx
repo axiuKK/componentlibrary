@@ -18,7 +18,6 @@ export const AutoComplete = ({
     const [inputValue, setInputValue] = useState(value);
     const [suggestions, setSuggestions] = useState<string[]>([]);
 
-    console.log('suggestions', suggestions);
     const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setInputValue(value);
@@ -30,6 +29,19 @@ export const AutoComplete = ({
         }
     }
 
+    // 生成下拉列表
+    const generateDropDown = () => {
+        return (
+            <ul>
+                {suggestions.map((item, index) => (
+                    <li key={index}>
+                        {item}
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+
     return (
         <div className="auto-complete-wrapper">
             <Input
@@ -37,6 +49,7 @@ export const AutoComplete = ({
                 onChange={handleChange}
                 {...restProps}
             />
+            {suggestions.length > 0 && generateDropDown()}
         </div>
     )
 }

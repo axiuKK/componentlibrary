@@ -1103,6 +1103,60 @@ data.filter(item => item.includes(keyword))
 fetch实时请求
 
 ```js
-fetch(`url?keyword=${keyword}`)//异步
+fetch(`url?keyword=${keyword}`)//异步代码
+```
+
+输入触发查询，查询方式由 `fetchSuggestions` 抽象，当输入内容时，触发`handleChange`调用 `fetchSuggestions` 展示建议
+
+组件内部只负责：
+
+- 输入控制
+- 异步调用
+- 状态管理
+- UI 渲染
+
+```js
+import { useState } from 'react';
+import type { ChangeEvent } from 'react';
+import type { InputProps } from '../Input/input';
+import { Input } from '../Input/input';
+
+export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
+    // 过滤筛选，fetch异步
+    fetchSuggestions: (str: string) => Promise<string[]>
+    onSelect?: (item: string) => void
+}
+
+export const AutoComplete = ({
+    fetchSuggestions,
+    onSelect,
+    value = '',
+    ...restProps
+}: AutoCompleteProps) => {
+    const [inputValue, setInputValue] = useState(value);
+    const [suggestions, setSuggestions] = useState<string[]>([]);
+
+    console.log('suggestions', suggestions);
+    const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setInputValue(value);
+        if (value) {
+            const results = await fetchSuggestions(value);
+            setSuggestions(results);
+        } else {
+            setSuggestions([]);
+        }
+    }
+
+    return (
+        <div className="auto-complete-wrapper">
+            <Input
+                value={inputValue}
+                onChange={handleChange}
+                {...restProps}
+            />
+        </div>
+    )
+}
 ```
 
