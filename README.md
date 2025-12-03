@@ -1240,3 +1240,43 @@ const lakersWithNumber = [
 export const Default: StoryObj<typeof AutoComplete<{ number: number }>> = {
 ```
 
+对于普通的string，也要注意现在的返回值不能再是string而是Object类型
+
+```js
+//菜单为string类型
+export const Default: StoryObj<typeof AutoComplete> = {
+    args: {
+        value: '',
+        //现在不能return string必须return Object类型
+        fetchSuggestions: async (str: string) => {
+            return lakers.filter(item => item.includes(str)).map(item => ({ value: item }))
+        },
+        onSelect: (item) => {
+            console.log(item);
+        },
+    }
+}
+```
+
+#### 异步逻辑
+
+返回promise对象
+
+```js
+fetchSuggestions: (str: string) => Promise<DataSourceType<T>[]>
+```
+
+```js
+const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setInputValue(value);
+        if (value) {
+            //await异步
+            const results = await fetchSuggestions(value);
+            setSuggestions(results);
+        } else {
+            setSuggestions([]);
+        }
+    }
+```
+

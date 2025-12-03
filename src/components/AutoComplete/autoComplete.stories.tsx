@@ -1,6 +1,5 @@
 import { AutoComplete } from './autoComplete';
 import { type Meta, type StoryObj } from '@storybook/react';
-import { type DataSourceType } from './autoComplete';
 
 const autoCompleteMeta: Meta<typeof AutoComplete> = {
     title: 'AutoComplete',
@@ -56,5 +55,25 @@ export const DefaultWithNumber: StoryObj<typeof AutoComplete<{ number: number }>
                 </div>
             )
         }
+    }
+}
+
+//测试异步，使用api接口
+export const Async: StoryObj<typeof AutoComplete> = {
+    args: {
+        value: '',
+        fetchSuggestions: async (str: string) => {
+            const res = await fetch(`https://api.github.com/search/users?q=${str}`);
+            const data = await res.json();
+            const formatItems = data.items.slice(0, 10).map((item: any) => ({
+                value: item.login,
+                ...item
+            }));
+            console.log(formatItems);
+            return formatItems;
+        },
+        onSelect: (item) => {
+            console.log(item);
+        },
     }
 }
