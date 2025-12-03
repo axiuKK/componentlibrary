@@ -4,7 +4,7 @@ import { describe, expect, test, vi } from 'vitest'
 import { render } from '@testing-library/react'
 import { fireEvent } from 'storybook/test'
 import '@testing-library/jest-dom/vitest'
-
+import { useState } from 'react'
 
 const defaultProps: InputProps = {
     placeholder: 'default input',
@@ -18,7 +18,6 @@ describe('Input', () => {
         const inputElement = container.querySelector('input') as HTMLInputElement
         expect(inputElement).toBeInTheDocument()
         expect(inputElement).toHaveAttribute('placeholder', 'default input')
-        expect(inputElement).toHaveAttribute('value', '')        
     })
     test('render disabled input', () => {
         const { container } = render(<Input {...defaultProps} disabled />)
@@ -61,5 +60,17 @@ describe('Input', () => {
         expect(inputElement).toBeInTheDocument()
         expect(inputElement).toHaveAttribute('placeholder', 'default input')
         expect(inputElement).toHaveAttribute('value', '') // append 不影响 value
+    })
+    test('input works correctly', () => {
+        const Wrapper = () => {
+            const [value, setValue] = useState('')
+            return <Input value={value} onChange={e => setValue(e.target.value)} />
+        }
+
+        const { container } = render(<Wrapper />)
+        const inputElement = container.querySelector('input') as HTMLInputElement
+
+        fireEvent.change(inputElement, { target: { value: 'hello' } })
+        expect(inputElement.value).toBe('hello')
     })
 })

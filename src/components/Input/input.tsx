@@ -5,7 +5,7 @@ import Icon from '../Icon/icon'
 
 type InputSize = 'lg' | 'sm'
 //omit忽略接口中的size属性，因为我们自己定义了size属性
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLElement>, 'size'> {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /**是否禁用 Input */
   disabled?: boolean;
   /**设置 input 大小，支持 lg 或者是 sm */
