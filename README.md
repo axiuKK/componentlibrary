@@ -1299,7 +1299,7 @@ const [loading,setLoading] = useState(false);
 
 ### 防抖节流
 
-`useEffect` + 防抖 Hook
+#### `useEffect` + 防抖 Hook
 
 `useEffect` 是 React **函数组件**里的一个 **Hook**，作用是“在组件渲染后执行副作用操作”。
 
@@ -1335,3 +1335,36 @@ useEffect(() => {
 **handleChange → 只更新状态**
 
 **useEffect → 监听状态变化做异步副作用**
+
+#### useDebounce自定义hook
+
+```js
+import { useState, useEffect } from 'react';
+
+const useDebounce = (value: string, delay: number = 300) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+
+        // 清理函数，组件卸载时清除定时器
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+
+    return debouncedValue;
+}
+
+export default useDebounce;
+```
+
+这里的 `return` 并不是返回数据，而是**返回一个清理函数（cleanup function）**。
+
+React 会在组件卸载或依赖变化时调用这个函数，常用于清理定时器、取消订阅等
+
+![image-20251204021622141](assets/image-20251204021622141.png)
+
+![image-20251204021736595](assets/image-20251204021736595.png)

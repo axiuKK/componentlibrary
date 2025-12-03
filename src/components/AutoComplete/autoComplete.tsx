@@ -3,6 +3,7 @@ import type { ChangeEvent, ReactNode } from 'react';
 import type { InputProps } from '../Input/input';
 import { Input } from '../Input/input';
 import Icon from '../Icon/icon';
+import useDebounce from '../../hooks/useDebounce';
 
 interface DataSourceObject {
     value: string
@@ -26,13 +27,15 @@ export const AutoComplete = <T,>({
     const [inputValue, setInputValue] = useState(value as string);
     const [suggestions, setSuggestions] = useState<DataSourceType<T>[]>([]);
     const [loading, setLoading] = useState(false);
+    // 防抖处理后的输入值
+    const debouncedValue = useDebounce(inputValue);
 
-    //防抖节流，避免频繁请求
+    //监听输入值变化
     useEffect(() => {
         const fetchData = async () => {
-            if (inputValue) {
+            if (debouncedValue) {
                 setLoading(true);
-                const results = await fetchSuggestions(inputValue);
+                const results = await fetchSuggestions(debouncedValue);
                 setSuggestions(results);
                 setLoading(false);
             } else {
@@ -41,7 +44,7 @@ export const AutoComplete = <T,>({
         }
 
         fetchData();
-    }, [inputValue]);
+    }, [debouncedValue]);
 
     const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
