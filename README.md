@@ -1368,3 +1368,49 @@ React 会在组件卸载或依赖变化时调用这个函数，常用于清理�
 ![image-20251204021622141](assets/image-20251204021622141.png)
 
 ![image-20251204021736595](assets/image-20251204021736595.png)
+
+### 键盘事件
+
+上下箭头+回车+esc
+
+```js
+// 处理键盘事件
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        switch (e.key) {
+            case 'ArrowUp': // 上箭头
+                setHighlightIndex((prevIndex) => Math.max(prevIndex - 1, -1));
+                break;
+            case 'ArrowDown': // 下箭头
+                setHighlightIndex((prevIndex) => Math.min(prevIndex + 1, suggestions.length - 1));
+                break;
+            case 'Enter': // 回车键
+                if (highlightIndex >= 0 && highlightIndex < suggestions.length) {
+                    handleSelect(suggestions[highlightIndex]);
+                }
+                break;
+            case 'Escape': // 转义键
+                setSuggestions([]);
+                break;
+        }
+    }
+```
+
+```js
+<ul>
+                {suggestions.map((item, index) => {
+                    // 高亮显示当前选中项
+                    const itemClasses = classNames('suggestion-item', {
+                        'item-highlighted': index === highlightIndex
+                    });
+                    return (
+                        <li key={index}
+                            className={itemClasses}
+                            onClick={() => handleSelect(item)}>
+                            {renderTemplate(item)}
+                        </li>
+                    )
+                }
+                )}
+            </ul>
+```
+
