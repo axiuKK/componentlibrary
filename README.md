@@ -1070,7 +1070,7 @@ export default defineConfig({
     {
     extends: true,
     test: {
-      include: ['tests/**/*.test.{ts,tsx}', 'src/**/*.test.tsx'],//jia'shan
+      include: ['tests/**/*.test.{ts,tsx}', 'src/**/*.test.tsx'],//加上test文件的测试
       globals: true,
       environment: 'jsdom'
     }
@@ -1080,3 +1080,8 @@ export default defineConfig({
 });
 ```
 
+### menu测试修复
+
+由于在transition中把submenu组件改成先开始不渲染，在click/hover后才渲染，所以在测试中查看子项的都出错了
+
+把未渲染时对子组件的测试都删除即可，在渲染后添加

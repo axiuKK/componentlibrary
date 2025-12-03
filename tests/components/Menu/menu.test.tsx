@@ -101,8 +101,6 @@ describe('Menu 组件', () => {
     //scope选择当前元素的 直接子元素，而不是所有后代元素
     expect(menuElement.querySelectorAll(':scope > li').length).toBe(4)  // 检查是否渲染了 4 个 li
     expect(wrapper.getByText('下拉菜单')).toHaveClass('submenu-title')  // 检查默认类名
-    expect(wrapper.getByText('子项1')).toHaveClass('menu-item')  // 检查默认类名
-    expect(wrapper.getByText('子项2')).toHaveClass('menu-item')  // 检查默认类名
     //menuItem组件，className=menu-item
     expect(activeElement).toHaveClass('menu-item active')  // 检查默认类名
     expect(disabledElement).toHaveClass('menu-item disabled')  // 检查默认类名
@@ -143,12 +141,12 @@ describe('Menu 组件', () => {
     spy.mockRestore()
   })
   test('horizontal submenu hover and click', async () => {
-    expect(wrapper.queryByText('子项1')).not.toBeVisible()
     const dropdownElement = wrapper.getByText('下拉菜单')
     //模拟鼠标悬停事件
     fireEvent.mouseEnter(dropdownElement)
     await waitFor(() => {
-      expect(wrapper.getByText('子项1')).toBeVisible()
+      const subItem = wrapper.getByText('子项1') // getByText 确保子项已经渲染
+      expect(subItem).toBeVisible()
     })
     //模拟点击事件
     fireEvent.click(wrapper.getByText('子项1'))
@@ -158,8 +156,9 @@ describe('Menu 组件', () => {
     //模拟鼠标移出事件
     fireEvent.mouseLeave(dropdownElement)
     await waitFor(() => {
-      expect(wrapper.getByText('子项1')).not.toBeVisible()
-    })   
+      const subItem = wrapper.getByText('子项1')
+      expect(subItem).not.toBeVisible()
+    })
   })
   test('vertical submenu hover and click', async () => {
     cleanup()
@@ -169,16 +168,24 @@ describe('Menu 组件', () => {
     const verticalDropdownElement = verticalWrapper.getByText('下拉菜单')
     expect(verticalDropdownElement).toHaveClass('submenu-title')  // 检查默认类名
     verticalWrapper.container.appendChild(createStyleFile())
-    expect(verticalWrapper.queryByText('子项1')).not.toBeVisible()
-    //模拟点击事件
+    // 点击展开子菜单
+    fireEvent.click(verticalDropdownElement)
+    await waitFor(() => {
+      const subItem = verticalWrapper.getByText('子项1')
+      expect(subItem).toBeVisible()
+    })
+
+    // 点击子菜单项触发 onSelect
     fireEvent.click(verticalWrapper.getByText('子项1'))
     await waitFor(() => {
       expect(defaultProps.onSelect).toHaveBeenCalledWith('4-0')
     })
-    //模拟再次点击，关闭子菜单
-    fireEvent.click(verticalWrapper.getByText('子项1'))
+
+    // 再次点击关闭子菜单
+    fireEvent.click(verticalDropdownElement)
     await waitFor(() => {
-      expect(verticalWrapper.getByText('子项1')).not.toBeVisible()
-    })   
+      const subItem = verticalWrapper.getByText('子项1')
+      expect(subItem).not.toBeVisible()
+    })
   })
 })
