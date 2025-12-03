@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 import type { InputProps } from '../Input/input';
 import { Input } from '../Input/input';
 
@@ -7,12 +7,14 @@ export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
     // 过滤筛选，fetch异步
     fetchSuggestions: (str: string) => Promise<string[]>
     onSelect?: (item: string) => void
+    renderOption?: (item: string) => ReactNode
 }
 
 export const AutoComplete = ({
     fetchSuggestions,
     onSelect,
     value = '',
+    renderOption,
     ...restProps
 }: AutoCompleteProps) => {
     const [inputValue, setInputValue] = useState(value);
@@ -34,7 +36,10 @@ export const AutoComplete = ({
         // 触发选择回调,把选中的值传给父组件
         onSelect?.(item);
     }
-
+    //存在renderOption则使用renderOption渲染，否则直接渲染item
+    const renderTemplate = (item: string) => {
+        return renderOption ? renderOption(item) : item
+    }
     // 生成下拉列表
     const generateDropDown = () => {
         return (
@@ -42,7 +47,7 @@ export const AutoComplete = ({
                 {suggestions.map((item, index) => (
                     <li key={index}
                         onClick={() => handleSelect(item)}>
-                        {item}
+                        {renderTemplate(item)}
                     </li>
                 ))}
             </ul>

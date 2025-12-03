@@ -1187,3 +1187,12 @@ const handleSelect = (item: string) => {
     }
 ```
 
+自定义菜单样式，添加renderOptionshu'x
+
+```js
+//存在renderOption则使用renderOption渲染，否则直接渲染item
+    const renderTemplate = (item: string) => {
+        return renderOption ? renderOption(item) : item
+    }
+```
+

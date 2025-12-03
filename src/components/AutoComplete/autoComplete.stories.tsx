@@ -21,6 +21,9 @@ export const Default: Story = {
     },
     onSelect: (item: string) => {
       console.log(item);
+    },
+    renderOption: (item: string) => {
+      return <h2>Name: {item}</h2>
     }
   }
 }
