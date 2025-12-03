@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Input from './input';
+import { useState } from 'react';
 
 const inputMeta: Meta<typeof Input> = {
   title: 'input',
@@ -78,3 +79,20 @@ export const EPandInput: Story = {
   },
 }
 
+const ControlledTemplate = (args: React.ComponentProps<typeof Input>) => {
+  const [value, setValue] = useState('');
+  return (
+    <Input
+      {...args}
+      value={value}
+      onChange={e => setValue(e.target.value)}
+    />
+  );
+};
+
+export const ControlledInput: Story = {
+  render: ControlledTemplate,
+  args: {
+    placeholder: '这是一个受控组件',
+  },
+};
