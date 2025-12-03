@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { ChangeEvent, ReactNode } from 'react';
 import type { InputProps } from '../Input/input';
 import { Input } from '../Input/input';
@@ -9,7 +9,7 @@ interface DataSourceObject {
 }
 export type DataSourceType<T = {}> = T & DataSourceObject
 
-export interface AutoCompleteProps<T={}> extends Omit<InputProps, 'onSelect'> {
+export interface AutoCompleteProps<T = {}> extends Omit<InputProps, 'onSelect'> {
     // 过滤筛选，fetch异步
     fetchSuggestions: (str: string) => Promise<DataSourceType<T>[]>
     onSelect?: (item: DataSourceType<T>) => void
@@ -23,21 +23,29 @@ export const AutoComplete = <T,>({
     renderOption,
     ...restProps
 }: AutoCompleteProps<T>) => {
-    const [inputValue, setInputValue] = useState(value);
+    const [inputValue, setInputValue] = useState(value as string);
     const [suggestions, setSuggestions] = useState<DataSourceType<T>[]>([]);
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    //防抖节流，避免频繁请求
+    useEffect(() => {
+        const fetchData = async () => {
+            if (inputValue) {
+                setLoading(true);
+                const results = await fetchSuggestions(inputValue);
+                setSuggestions(results);
+                setLoading(false);
+            } else {
+                setSuggestions([]);
+            }
+        }
+
+        fetchData();
+    }, [inputValue]);
 
     const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setInputValue(value);
-        if (value) {
-            setLoading(true);
-            const results = await fetchSuggestions(value);
-            setSuggestions(results);
-            setLoading(false);
-        } else {
-            setSuggestions([]);
-        }
     }
     const handleSelect = (item: DataSourceType<T>) => {
         setInputValue(item.value);
@@ -70,7 +78,7 @@ export const AutoComplete = <T,>({
                 onChange={handleChange}
                 {...restProps}
             />
-            {loading && <Icon icon="spinner" spin/>}
+            {loading && <Icon icon="spinner" spin />}
             {suggestions.length > 0 && generateDropDown()}
         </div>
     )

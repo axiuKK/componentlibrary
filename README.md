@@ -1280,3 +1280,58 @@ const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
     }
 ```
 
+添加loading的icon
+
+```js
+const [loading,setLoading] = useState(false);
+```
+
+```js
+            setLoading(true);
+            const results = await fetchSuggestions(value);
+            setSuggestions(results);
+            setLoading(false);
+```
+
+```js
+{loading && <Icon icon="spinner" spin/>}
+```
+
+### 防抖节流
+
+`useEffect` + 防抖 Hook
+
+`useEffect` 是 React **函数组件**里的一个 **Hook**，作用是“在组件渲染后执行副作用操作”。
+
+**副作用（Side Effect）**：指组件渲染本身之外的操作，比如：
+
+- 数据请求（fetch API）
+- 订阅/取消订阅事件
+- 设置定时器/清理定时器
+- 操作 DOM（一般少用）
+
+```js
+useEffect(() => {
+        const fetchData = async () => {
+            if (inputValue) {
+                setLoading(true);
+                const results = await fetchSuggestions(inputValue);
+                setSuggestions(results);
+                setLoading(false);
+            } else {
+                setSuggestions([]);
+            }
+        }
+
+        fetchData();
+    }, [inputValue]);
+
+    const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setInputValue(value);
+    }
+```
+
+**handleChange → 只更新状态**
+
+**useEffect → 监听状态变化做异步副作用**
