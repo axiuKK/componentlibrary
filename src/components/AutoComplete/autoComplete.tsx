@@ -28,13 +28,20 @@ export const AutoComplete = ({
             setSuggestions([]);
         }
     }
+    const handleSelect = (item: string) => {
+        setInputValue(item);
+        setSuggestions([]);
+        // 触发选择回调,把选中的值传给父组件
+        onSelect?.(item);
+    }
 
     // 生成下拉列表
     const generateDropDown = () => {
         return (
             <ul>
                 {suggestions.map((item, index) => (
-                    <li key={index}>
+                    <li key={index}
+                        onClick={() => handleSelect(item)}>
                         {item}
                     </li>
                 ))}

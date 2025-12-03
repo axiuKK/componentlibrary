@@ -18,6 +18,9 @@ export const Default: Story = {
       const lakers = ['bradley','pope','caruso','cook','cousins',
                       'jams','AD','green','howard','kuzma','McGee','rando']
       return lakers.filter(item => item.includes(str))
+    },
+    onSelect: (item: string) => {
+      console.log(item);
     }
   }
 }
