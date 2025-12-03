@@ -1001,3 +1001,82 @@ const menuMeta: Meta<typeof Menu> = {
 ```
 
 ![image-20251203005907735](assets/image-20251203005907735.png)
+
+### MDX
+
+MDX 是 **Markdown + JSX** 的组合，是一种可以在 Markdown 文档中直接写 React 组件的文件格式。简单来说，你可以把它当成一个“可以写组件的 Markdown”。
+
+`.mdx` 文件 = Markdown（文本、标题、列表、代码块） + 可以嵌入 React 组件。
+
+可以实现自定义doc
+
+## Input
+
+![image-20251203011623999](assets/image-20251203011623999.png)
+
+input.tsx
+
+```js
+//omit忽略接口中的size属性，因为我们自己定义了size属性
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLElement>, 'size'>
+```
+
+### 测试中只有stories没有test
+
+在vite.config.ts中，project覆盖了原本的test配置，所以要在project中重新加上test路径
+
+```js
+/// <reference types="vitest/config" />
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+// https://vite.dev/config/
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import { playwright } from '@vitest/browser-playwright';
+const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+
+// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true,//被覆盖
+    // 可以直接使用 test/expect
+    environment: "jsdom" // 模拟浏览器环境
+    ,
+
+    projects: [{
+      extends: true,
+      plugins: [
+      // The plugin will run tests for the stories defined in your Storybook config
+      // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
+      storybookTest({
+        configDir: path.join(dirname, '.storybook')//只有对storybook的测试
+      })],
+      test: {
+        name: 'storybook',
+        browser: {
+          enabled: true,
+          headless: true,
+          provider: playwright({}),
+          instances: [{
+            browser: 'chromium'
+          }]
+        },
+        setupFiles: ['.storybook/vitest.setup.ts']
+      }
+    },
+    {
+    extends: true,
+    test: {
+      include: ['tests/**/*.test.{ts,tsx}', 'src/**/*.test.tsx'],//jia'shan
+      globals: true,
+      environment: 'jsdom'
+    }
+  }
+  ]
+  }
+});
+```
+

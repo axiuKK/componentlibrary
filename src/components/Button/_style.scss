@@ -60,12 +60,12 @@
   }
 
   &.btn-sm {
-    padding: vars.$btn-padding-sm;
+    padding: vars.$btn-padding-x-sm vars.$btn-padding-y-sm;
     font-size: vars.$btn-font-size-sm;
   }
 
   &.btn-lg {
-    padding: vars.$btn-padding-lg;
+    padding: vars.$btn-padding-x-lg vars.$btn-padding-y-lg;
     font-size: vars.$btn-font-size-lg;
   }
 }

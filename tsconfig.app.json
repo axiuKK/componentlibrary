@@ -30,6 +30,7 @@
   },
   "include": [
     "src",
-    "tests/components/sum/sum.test.js"
+    "tests/components/sum/sum.test.js",
+    "tests/components/Input/input.test.tsx"
   ]
 }
