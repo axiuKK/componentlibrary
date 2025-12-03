@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ChangeEvent, ReactNode } from 'react';
 import type { InputProps } from '../Input/input';
 import { Input } from '../Input/input';
+import Icon from '../Icon/icon';
 
 interface DataSourceObject {
     value: string
@@ -24,13 +25,16 @@ export const AutoComplete = <T,>({
 }: AutoCompleteProps<T>) => {
     const [inputValue, setInputValue] = useState(value);
     const [suggestions, setSuggestions] = useState<DataSourceType<T>[]>([]);
+    const [loading,setLoading] = useState(false);
 
     const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setInputValue(value);
         if (value) {
+            setLoading(true);
             const results = await fetchSuggestions(value);
             setSuggestions(results);
+            setLoading(false);
         } else {
             setSuggestions([]);
         }
@@ -66,6 +70,7 @@ export const AutoComplete = <T,>({
                 onChange={handleChange}
                 {...restProps}
             />
+            {loading && <Icon icon="spinner" spin/>}
             {suggestions.length > 0 && generateDropDown()}
         </div>
     )
