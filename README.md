@@ -1667,3 +1667,15 @@ const useClickOutside = (ref: RefObject<HTMLElement | null>, handler: () => void
 export default useClickOutside;
 ```
 
+### 添加动画
+
+```js
+<Transition
+                in={suggestions.length > 0 || loading} // 控制动画显示隐藏
+                animation="zoom-in-top"
+                timeout={300}
+                unmountOnExit
+                nodeRef={dropdownRef as unknown as React.Ref<undefined>} // TS 类型转换
+            >
+```
+
