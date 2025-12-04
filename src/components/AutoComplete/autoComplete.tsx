@@ -94,7 +94,12 @@ export const AutoComplete = <T,>({
     // 生成下拉列表
     const generateDropDown = () => {
         return (
-            <ul>
+            <ul className='suggestion-list'>
+                {loading && 
+                    <li className='suggestions-loading-icon'>
+                        <Icon icon="spinner" spin />
+                    </li>
+                }
                 {suggestions.map((item, index) => {
                     // 高亮显示当前选中项
                     const itemClasses = classNames('suggestion-item', {
@@ -121,7 +126,6 @@ export const AutoComplete = <T,>({
                 onKeyDown={handleKeyDown}
                 {...restProps}
             />
-            {loading && <Icon icon="spinner" spin />}
             {suggestions.length > 0 && generateDropDown()}
         </div>
     )

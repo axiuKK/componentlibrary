@@ -1,6 +1,37 @@
 @use "../../styles/_variables" as vars;
 
-.item-highlighted {
-    background-color: vars.$primary;
-    color: vars.$white;
+.auto-complete-wrapper {
+  position: relative;
+}
+.suggestion-list {
+  list-style:none;
+  padding-left: 0;
+  white-space: nowrap;
+  position: absolute;
+  background: vars.$white;
+  z-index: 100;
+  top: calc(100% + 8px);
+  left: 0;
+  border: vars.$menu-border-width solid vars.$menu-border-color;
+  box-shadow: vars.$submenu-box-shadow;
+  width: 100%;
+  .suggestions-loading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 75px;
+  }
+  .suggestion-item {
+    padding: vars.$menu-item-padding-y vars.$menu-item-padding-x;
+    cursor: pointer;
+    transition: vars.$menu-transition;
+    color: vars.$body-color;
+    &.item-highlighted {
+      background: vars.$menu-item-active-color !important;
+      color: vars.$white !important;
+    }
+    &:hover {
+      color: vars.$menu-item-active-color !important;
+    }
+  }
 }
