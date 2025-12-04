@@ -1755,7 +1755,7 @@ Request Payload 显示 `postData`
 
 ### 上传文件
 
-1、表单上传（Form Submit）
+#### 1、表单上传（Form Submit）
 
 ```js
 <div className='App' style={{ marginTop: '100px', marginLeft: '100px' }}>
@@ -1776,3 +1776,31 @@ Request Payload 显示 `postData`
 - ✅ **不需要 JavaScript**，浏览器自动处理文件上传。
 - ❌ **页面会刷新**（默认行为），除非加上 `event.preventDefault()` 来阻止。
 - ❌ **无法在上传过程中显示进度或状态**，除非配合 JavaScript。
+
+#### 2、使用JavaScript上传
+
+```js
+const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // 取用户选择的第一个文件
+    const file = e.target.files?.[0]
+    if (file) {
+      //封装表单数据
+      const formData = new FormData()
+      formData.append('file', file)
+      axios.post('https://jsonplaceholder.typicode.com/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(res => {
+          console.log(res.data)
+          setTitle(res.data.title)
+        })
+    }
+  }
+```
+
+`const formData = new FormData()`
+
+- `FormData` 是浏览器提供的 **API，用于封装表单数据**，尤其适合上传文件。
+- 可以向里面追加文件、文本等，发送给服务器时会自动封装成 `multipart/form-data`。

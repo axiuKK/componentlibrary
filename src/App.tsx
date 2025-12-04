@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type ChangeEvent } from 'react'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 library.add(fas)
@@ -29,14 +29,28 @@ function App() {
         setTitle(res.data.title)
       })
   }, [])
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // 取用户选择的第一个文件
+    const file = e.target.files?.[0]
+    if (file) {
+      //封装表单数据
+      const formData = new FormData()
+      formData.append('file', file)
+      axios.post('https://jsonplaceholder.typicode.com/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(res => {
+          console.log(res.data)
+          setTitle(res.data.title)
+        })
+    }
+  }
 
   return (
     <div className='App' style={{ marginTop: '100px', marginLeft: '100px' }}>
-      {/* 格式设置为multipart/form-data */}
-      <form method="post" encType="multipart/form-data" action="https://jsonplaceholder.typicode.com/posts">
-        <input type='file' name='file'></input>
-        <button type="submit">提交</button>
-      </form>
+      <input type='file' name='file' onChange={handleFileChange}></input>
     </div>
   )
 }
