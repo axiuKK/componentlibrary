@@ -1433,7 +1433,9 @@ React 会在组件卸载或依赖变化时调用这个函数，常用于清理�
         }
 ```
 
-#### ⭐按 Enter 选中一项后，不要再触发一次查询（用选中项的 value 再请求一次 API）
+#### ⭐状态变更来源区分
+
+按 Enter 选中一项后，不要再触发一次查询（用选中项的 value 再请求一次 API）
 
 因为Enter后会改变input的值value，所以会触发useEffect监听
 
@@ -1481,7 +1483,7 @@ myRef.current = 100;   // ✅
     useEffect(() => {
         setHighlightIndex(-1);
         const fetchData = async () => {
-            if (debouncedValue && triggerSearch.current) {//tian'j'a
+            if (debouncedValue && triggerSearch.current) {//添加开关
                 setLoading(true);
                 const results = await fetchSuggestions(debouncedValue);
                 setSuggestions(results);
@@ -1506,5 +1508,85 @@ myRef.current = 100;   // ✅
         onSelect?.(item);
         triggerSearch.current = false;//select不触发fetch
     }
+```
+
+#### 当用户点击 AutoComplete 组件外部区域时，自动关闭下拉菜单
+
+```js
+渲染 AutoComplete
+     ↓
+componentRef 绑定到最外层 div
+     ↓
+useClickOutside 监听 document 点击
+     ↓
+点击发生 →
+     ↓
+判断：是否点在 componentRef 内？
+    ├─ 是 → 什么也不做
+    └─ 否 → 执行 handler
+                   ↓
+             setSuggestions([])
+                   ↓
+             下拉菜单关闭
+
+```
+
+```js
+const componentRef = useRef<HTMLDivElement>(null);
+```
+
+componentRef 是一个 引用对象 (RefObject<HTMLDivElement>)。
+
+componentRef.current 的类型是 HTMLDivElement | null，初始化时为 null。
+
+```js
+useClickOutside(componentRef, () => {
+        setSuggestions([]);
+    });
+```
+
+当点击时调用组件useClickOutside
+
+```js
+return (
+    //绑定在最外层元素上
+        <div className="auto-complete-wrapper" ref={componentRef}>
+            <Input
+                value={inputValue}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                {...restProps}
+            />
+            {loading && <Icon icon="spinner" spin />}
+            {suggestions.length > 0 && generateDropDown()}
+        </div>
+    )
+```
+
+组件useClickOutside定义
+
+```js
+import { type RefObject, useEffect } from 'react';
+
+//ref：“点击外部”的目标元素的引用，handler：当点击发生在 ref 所指元素外部时执行的回调函数
+const useClickOutside = (ref: RefObject<HTMLElement | null>, handler: () => void) => {
+    useEffect(() => {
+        //事件处理函数，鼠标点击事件
+        const listener=(event:MouseEvent)=>{
+            //如果ref.current存在且点击事件的目标元素不在ref.current内部
+            if(ref.current && !ref.current.contains(event.target as Node)){
+                handler();
+            }
+        }
+        // 监听全局点击事件
+        document.addEventListener('click', listener);
+        // 组件卸载时移除点击事件监听
+        return () => {
+            document.removeEventListener('click', listener);
+        }
+    }, [ref, handler]);
+}
+
+export default useClickOutside;
 ```
 

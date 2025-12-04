@@ -6,6 +6,7 @@ import Icon from '../Icon/icon';
 import useDebounce from '../../hooks/useDebounce';
 import classNames from 'classnames';
 import type { KeyboardEvent } from 'react';
+import useClickOutside from '../../hooks/useClickOutside';
 
 interface DataSourceObject {
     value: string
@@ -31,6 +32,10 @@ export const AutoComplete = <T,>({
     const [loading, setLoading] = useState(false);
     const [highlightIndex, setHighlightIndex] = useState(-1);
     const triggerSearch = useRef(false);
+    const componentRef = useRef<HTMLDivElement>(null);
+    useClickOutside(componentRef, () => {
+        setSuggestions([]);
+    });
     // 防抖处理后的输入值
     const debouncedValue = useDebounce(inputValue);
 
@@ -109,7 +114,7 @@ export const AutoComplete = <T,>({
     }
 
     return (
-        <div className="auto-complete-wrapper">
+        <div className="auto-complete-wrapper" ref={componentRef}>
             <Input
                 value={inputValue}
                 onChange={handleChange}
