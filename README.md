@@ -1679,3 +1679,77 @@ export default useClickOutside;
             >
 ```
 
+## UpLoad
+
+![image-20251204235226573](assets/image-20251204235226573.png)
+
+upload一个文件的生命周期：
+
+```js
+start->点击按钮选择文件->beforeUpload(file)->onProgress(event.file)->onChange(file)->onSuccess(response,file)->点击删除按钮->onRemoved(file)
+    |
+ onError(erorr,file)   
+```
+
+beforeUpload(file)上传前检查文件大小、类型是否符合
+
+另外还需要后端接口action属性
+
+### 前后端通信
+
+| 名称  | 类型     | 特点                                   |
+| ----- | -------- | -------------------------------------- |
+| XHR   | 原生 API | 低层级，回调方式，语法冗长             |
+| Ajax  | 技术概念 | 指异步请求页面更新，不是 API           |
+| Axios | 第三方库 | 基于 XHR + Promise，封装简洁，功能丰富 |
+
+Axios 提供了封装好的异步请求、统一拦截和易用 API，比原生 XHR 和 fetch 更方便、更安全、更易维护。
+
+#### 后端环境
+
+使用在线服务==JSONPlaceholder==、Mocky
+
+使用axois+JSONPlaceholder
+
+GET请求
+
+```js
+const [title, setTitle] = useState('')
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/posts/1',{
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      responseType: 'json'
+    }).then(res => {
+      console.log(res.data)
+      setTitle(res.data.title)
+    })
+  }, [])
+```
+
+成功在请求头中添加'X-Requested-With': 'XMLHttpRequest'![image-20251205011334479](assets/image-20251205011334479.png)
+
+POST请求
+
+```js
+const postData = {
+    title: 'title',
+    body: 'body'
+  }
+
+useEffect(() => {
+    axios.post('https://jsonplaceholder.typicode.com/posts', postData)
+      .then(res => {
+        console.log(res.data)
+        setTitle(res.data.title)
+      })
+  }, [])
+```
+
+成功发送PSOT并返回201![image-20251205012300583](assets/image-20251205012300583.png)
+
+Request Payload 显示 `postData`
+
+![image-20251205012413570](assets/image-20251205012413570.png)
+

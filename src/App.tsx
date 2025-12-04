@@ -1,3 +1,5 @@
+import axios from 'axios'
+import { useState, useEffect } from 'react'
 import Button from './components/Button/button'
 import Menu from './components/Menu/menu'
 import MenuItem from './components/Menu/menuItem'
@@ -7,9 +9,34 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 library.add(fas)
 
 function App() {
+  const [title, setTitle] = useState('')
+  const postData = {
+    title: 'title',
+    body: 'body'
+  }
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/posts/1', {
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      responseType: 'json'
+    }).then(res => {
+      console.log(res.data)
+      setTitle(res.data.title)
+    })
+  }, [])
+
+  useEffect(() => {
+    axios.post('https://jsonplaceholder.typicode.com/posts', postData)
+      .then(res => {
+        console.log(res.data)
+        setTitle(res.data.title)
+      })
+  }, [])
 
   return (
     <>
+      <h1>{title}</h1>
       <Menu mode="horizontal" defaultIndex="0" onSelect={(index) => console.log(index)} defaultOpenSubMenus={['3']}>
         <MenuItem>首页</MenuItem>
         <MenuItem disabled>关于</MenuItem>
