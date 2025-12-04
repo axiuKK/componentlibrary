@@ -1433,3 +1433,78 @@ React 会在组件卸载或依赖变化时调用这个函数，常用于清理�
         }
 ```
 
+#### ⭐按 Enter 选中一项后，不要再触发一次查询（用选中项的 value 再请求一次 API）
+
+因为Enter后会改变input的值value，所以会触发useEffect监听
+
+1. Enter → `handleSelect(item)`
+2. `handleSelect` → `setInputValue(item.value)`
+3. `inputValue` 改变 → `useDebounce`
+4. `debouncedValue` 改变 → `useEffect` 重新调用 `fetchSuggestions`
+5. 再发一次请求 ×
+
+**增加一个 ref 标志位来阻断请求**
+
+`ref` 是一个“能在组件重新渲染时一直保持不变的普通变量容器”，
+ 修改它👉不会触发组件重新渲染。
+
+所以用ref代替state
+
+```js
+const myRef = useRef(0);
+```
+
+得到的是一个对象：
+
+```js
+{
+  current: 0
+}
+```
+
+真正的值在：myRef.current
+
+修改值也只改 .current
+
+```js
+myRef.current = 100;   // ✅
+```
+
+而这个操作：
+
+✅ 不会刷新页面
+✅ 不会重新渲染组件
+✅ 不会触发 useEffect
+
+```js
+//监听输入值变化
+    useEffect(() => {
+        setHighlightIndex(-1);
+        const fetchData = async () => {
+            if (debouncedValue && triggerSearch.current) {//tian'j'a
+                setLoading(true);
+                const results = await fetchSuggestions(debouncedValue);
+                setSuggestions(results);
+                setLoading(false);
+            } else {
+                setSuggestions([]);
+            }
+        }
+
+        fetchData();
+    }, [debouncedValue]);
+
+    const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setInputValue(value);
+        triggerSearch.current = true;//handle触发fetch
+    }
+    const handleSelect = (item: DataSourceType<T>) => {
+        setInputValue(item.value);
+        setSuggestions([]);
+        // 触发选择回调,把选中的值传给父组件
+        onSelect?.(item);
+        triggerSearch.current = false;//select不触发fetch
+    }
+```
+

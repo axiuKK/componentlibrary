@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { ChangeEvent, ReactNode } from 'react';
 import type { InputProps } from '../Input/input';
 import { Input } from '../Input/input';
@@ -30,6 +30,7 @@ export const AutoComplete = <T,>({
     const [suggestions, setSuggestions] = useState<DataSourceType<T>[]>([]);
     const [loading, setLoading] = useState(false);
     const [highlightIndex, setHighlightIndex] = useState(-1);
+    const triggerSearch = useRef(false);
     // 防抖处理后的输入值
     const debouncedValue = useDebounce(inputValue);
 
@@ -37,7 +38,7 @@ export const AutoComplete = <T,>({
     useEffect(() => {
         setHighlightIndex(-1);
         const fetchData = async () => {
-            if (debouncedValue) {
+            if (debouncedValue && triggerSearch.current) {
                 setLoading(true);
                 const results = await fetchSuggestions(debouncedValue);
                 setSuggestions(results);
@@ -53,12 +54,14 @@ export const AutoComplete = <T,>({
     const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setInputValue(value);
+        triggerSearch.current = true;
     }
     const handleSelect = (item: DataSourceType<T>) => {
         setInputValue(item.value);
         setSuggestions([]);
         // 触发选择回调,把选中的值传给父组件
         onSelect?.(item);
+        triggerSearch.current = false;
     }
     // 处理键盘事件
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
