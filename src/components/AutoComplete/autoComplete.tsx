@@ -7,6 +7,7 @@ import useDebounce from '../../hooks/useDebounce';
 import classNames from 'classnames';
 import type { KeyboardEvent } from 'react';
 import useClickOutside from '../../hooks/useClickOutside';
+import Transition from '../Transition/transition';
 
 interface DataSourceObject {
     value: string
@@ -92,29 +93,38 @@ export const AutoComplete = <T,>({
         return renderOption ? renderOption(item) : item.value
     }
     // 生成下拉列表
+    const dropdownRef = useRef<HTMLUListElement>(null);// 下拉列表的真实 DOM 引用
     const generateDropDown = () => {
         return (
-            <ul className='suggestion-list'>
-                {loading && 
-                    <li className='suggestions-loading-icon'>
-                        <Icon icon="spinner" spin />
-                    </li>
-                }
-                {suggestions.map((item, index) => {
-                    // 高亮显示当前选中项
-                    const itemClasses = classNames('suggestion-item', {
-                        'item-highlighted': index === highlightIndex
-                    });
-                    return (
-                        <li key={index}
-                            className={itemClasses}
-                            onClick={() => handleSelect(item)}>
-                            {renderTemplate(item)}
+            <Transition
+                in={suggestions.length > 0 || loading} // 控制动画显示隐藏
+                animation="zoom-in-top"
+                timeout={300}
+                unmountOnExit
+                nodeRef={dropdownRef as unknown as React.Ref<undefined>} // TS 类型转换
+            >
+                <ul className='suggestion-list' ref={dropdownRef}>
+                    {loading &&
+                        <li className='suggestions-loading-icon'>
+                            <Icon icon="spinner" spin />
                         </li>
-                    )
-                }
-                )}
-            </ul>
+                    }
+                    {suggestions.map((item, index) => {
+                        // 高亮显示当前选中项
+                        const itemClasses = classNames('suggestion-item', {
+                            'item-highlighted': index === highlightIndex
+                        });
+                        return (
+                            <li key={index}
+                                className={itemClasses}
+                                onClick={() => handleSelect(item)}>
+                                {renderTemplate(item)}
+                            </li>
+                        )
+                    }
+                    )}
+                </ul>
+            </Transition>
         )
     }
 
@@ -126,7 +136,7 @@ export const AutoComplete = <T,>({
                 onKeyDown={handleKeyDown}
                 {...restProps}
             />
-            {suggestions.length > 0 && generateDropDown()}
+            {generateDropDown()}
         </div>
     )
 }
