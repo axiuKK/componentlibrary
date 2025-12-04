@@ -1753,3 +1753,26 @@ Request Payload 显示 `postData`
 
 ![image-20251205012413570](assets/image-20251205012413570.png)
 
+### 上传文件
+
+1、表单上传（Form Submit）
+
+```js
+<div className='App' style={{ marginTop: '100px', marginLeft: '100px' }}>
+      {/* 格式设置为multipart/form-data */}
+      <form method="post" encType="multipart/form-data" action="https://jsonplaceholder.typicode.com/posts">
+        <input type='file' name='file'></input>
+        <button type="submit">提交</button>
+      </form>
+    </div>
+```
+
+`<form>` 标签的 `method="post"` + `encType="multipart/form-data"` 表示 **以 POST 方式上传文件**。
+
+`<button type="submit">提交</button>` 会触发浏览器默认表单提交，把文件和其他表单字段一起发送到 `action` 指定的 URL。
+
+特点
+
+- ✅ **不需要 JavaScript**，浏览器自动处理文件上传。
+- ❌ **页面会刷新**（默认行为），除非加上 `event.preventDefault()` 来阻止。
+- ❌ **无法在上传过程中显示进度或状态**，除非配合 JavaScript。
