@@ -35,6 +35,7 @@ export const AutoComplete = <T,>({
 
     //监听输入值变化
     useEffect(() => {
+        setHighlightIndex(-1);
         const fetchData = async () => {
             if (debouncedValue) {
                 setLoading(true);

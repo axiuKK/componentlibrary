@@ -1414,3 +1414,22 @@ React 会在组件卸载或依赖变化时调用这个函数，常用于清理�
             </ul>
 ```
 
+#### 修复在输入变化时，highlight还指向上一个位置
+
+```js
+//监听输入值变化
+    useEffect(() => {
+        //每次输入变化时，重置highlight位置
+        setHighlightIndex(-1);
+        const fetchData = async () => {
+            if (debouncedValue) {
+                setLoading(true);
+                const results = await fetchSuggestions(debouncedValue);
+                setSuggestions(results);
+                setLoading(false);
+            } else {
+                setSuggestions([]);
+            }
+        }
+```
+
