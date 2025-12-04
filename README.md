@@ -887,6 +887,83 @@ CSSTransition
 
 ## 封装成Transition组件
 
+优化：添加nodeRef，避免查找结点使用findDOMNode
+
+```js
+import type { ReactNode } from "react";
+import { useRef } from "react";
+import { CSSTransition } from "react-transition-group";
+import type { CSSTransitionProps } from "react-transition-group/CSSTransition";
+
+type AnimationName = 'zoom-in-top' | 'zoom-in-left' | 'zoom-in-bottom' | 'zoom-in-right'
+
+type TransitionProps = CSSTransitionProps & {
+    animation?: AnimationName,
+    children?: ReactNode,
+};
+
+const Transition = ({
+    children,
+    classNames,
+    animation,
+    ...restProps
+}: TransitionProps) => {
+    //手动提供真实 DOM Ref，让库不再调用 findDOMNode
+    const nodeRef = useRef(null);
+    return (
+        <CSSTransition
+            nodeRef={nodeRef}
+            classNames={classNames ? classNames : animation}
+            {...restProps}
+        >
+            {children}
+        </CSSTransition>
+    )
+}
+
+export default Transition
+```
+
+在subMenu中使用
+
+`CSSTransition` / `Transition` 需要一个 **明确的 DOM 引用** 来执行动画。
+
+`nodeRef` 告诉 `Transition`：“动画目标是这个 DOM 节点（ul）”，而不是去使用 `findDOMNode`。
+
+当 `menuOpen` 为 `true`，Transition 会对 `nodeRef.current` 的 `<ul>` 添加对应的 CSS 类（比如 `zoom-in-top-enter`），实现动画。
+
+```js
+//表示将来 nodeRef.current 会指向一个 <ul> DOM 元素。
+const nodeRef = useRef<HTMLUListElement>(null)
+    return (
+        <li key={index} className={submenuItemclasses} {...mouseEvents}>
+            <div className='submenu-title' {...clickEvents}>
+                {title}
+                <Icon icon='angle-down' className='arrow-icon' />
+            </div>
+
+            <Transition
+                in={menuOpen}
+                timeout={300}
+                animation='zoom-in-top'
+                appear={true}
+                unmountOnExit={true}
+			//明确node信息
+                nodeRef={nodeRef as unknown as React.Ref<undefined>}
+            >
+//当 <ul> 渲染到页面上后，React 会把 DOM 节点 赋值给 nodeRef.current
+                <ul ref={nodeRef} className={classes}>
+                    {renderChildren()}
+                </ul>
+            </Transition>
+        </li>
+    )
+```
+
+当 `<ul>` 渲染到页面上后，React 会把 **DOM 节点** 赋值给 `nodeRef.current`。
+
+此时 `nodeRef.current` 就不再是 `null`，而是对应的 `<ul>` DOM 元素。
+
 ### 封装css
 
 在 Sass 里，`@mixin` 是 **可复用的样式模板**
