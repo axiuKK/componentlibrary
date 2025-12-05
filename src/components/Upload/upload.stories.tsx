@@ -33,21 +33,22 @@ export default uploadMeta
 
 type Story = StoryObj<typeof Upload>
 
-const Template = () => {
+const Template = (args: any) => {
     return (
         <Upload
+            {...args}
             action='https://jsonplaceholder.typicode.com/posts'
-            onProgress={(percentage, file) => {
-                console.log(percentage, file);
+            onProgress={(percentage) => {
+                console.log(percentage);
             }}
-            onSuccess={(data, file) => {
-                console.log(data, file);
+            onSuccess={() => {
+                console.log('上传成功');
             }}
-            onError={(error, file) => {
-                console.log(error, file);
+            onError={() => {
+                console.log('上传失败');
             }}
-            onChange={(file) => {
-                console.log(file);
+            onChange={() => {
+                console.log('文件改变');
             }}
         />
     )

@@ -78,11 +78,9 @@ const Upload = ({
                 }
             }
         }).then(res => {
-            console.log(res.data);
             onSuccess?.(res.data, file)
             onChange?.(file)
         }).catch(err => {
-            console.log(err);
             onError?.(err, file)
             onChange?.(file)
         })
