@@ -4,6 +4,14 @@ import { type Meta, type StoryObj } from '@storybook/react'
 const uploadMeta: Meta<typeof Upload> = {
     title: 'Upload',
     component: Upload,
+    // 上传组件的宽度
+    decorators: [
+    (Story) => (
+      <div style={{ width: 400 }}>
+        <Story />
+      </div>
+    ),
+  ],
     //启用自动文档
     tags: ['autodocs']
 }

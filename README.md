@@ -2168,3 +2168,24 @@ const defaultFileList = [
 ```
 
 ![image-20251205183952066](assets/image-20251205183952066.png)
+
+缩小story中的宽度
+
+```js
+const uploadMeta: Meta<typeof Upload> = {
+    title: 'Upload',
+    component: Upload,
+    // 上传组件的宽度
+    decorators: [
+    (Story) => (
+      <div style={{ width: 400 }}>
+        <Story />
+      </div>
+    ),
+  ],
+    //启用自动文档
+    tags: ['autodocs']
+}
+```
+
+![image-20251205191143003](assets/image-20251205191143003.png)
