@@ -1984,7 +1984,7 @@ const Template = (args: any) => {
 
 ### ui显示
 
-文件状态：显示加载进度、上传状态、删除按钮
+#### 文件状态：显示加载进度、上传状态、删除按钮
 
 ```js
 export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
@@ -2034,3 +2034,57 @@ useEffect(() => {
 成功打印fileList
 
 ![image-20251205165623893](assets/image-20251205165623893.png)
+
+#### 更新进度条
+
+`setState` 可以接受两种参数
+
+在 React（无论是类组件还是函数组件）中，`setState` / `useState` 的 setter 有两种写法：
+
+1. **直接传值**
+
+   ```js
+   setFileList([file1, file2]);
+   ```
+
+   - React 会把这个值直接设置为新的状态。
+   - 问题：如果你连续多次调用，或者依赖旧的 state 计算新值，就可能出现异步问题。
+
+2. **传入函数（函数式更新）**
+
+   ```js
+   setFileList(prev => [...prev, newFile]);
+   ```
+
+   - React 会把这个函数调用，传入 **最新的 state** 作为参数（这里是 `prev`）。
+   - 函数返回值会被用作新的 state。
+   - 优势：不管 state 更新是同步还是异步，函数总能拿到最新值，避免 race condition（竞争条件）。
+
+在进度条中更新percent和state
+
+```js
+if (percentage < 100) {
+    //找到文件uid，函数式更新
+        setFileList(prev => prev.map(item => item.uid === _file.uid ? { ...item, percent: percentage, status: 'uploading' } : item))
+        if (onProgress) {
+                        onProgress(percentage, file)
+                    }
+}
+```
+
+在success和error中更新state和//上传成功后返回的数据response?: any//上传失败后返回的错误信息error?: any
+
+```js
+}).then(res => {
+          //更新
+            setFileList(prev => prev.map(item => item.uid === _file.uid ? { ...item, status: 'success', response: res.data } : item))
+            onSuccess?.(res.data, file)
+            onChange?.(file)
+        }).catch(err => {
+          //geng'xin
+            setFileList(prev => prev.map(item => item.uid === _file.uid ? { ...item, status: 'error', error: err } : item))
+            onError?.(err, file)
+            onChange?.(file)
+        })
+```
+

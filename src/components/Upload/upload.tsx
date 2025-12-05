@@ -101,15 +101,18 @@ const Upload = ({
                 let percentage = e.total ? Math.round((e.loaded * 100) / e.total) : 0
                 //防止与onSuccess冲突，只在进度不是100%时调用onProgress
                 if (percentage < 100) {
+                    setFileList(prev => prev.map(item => item.uid === _file.uid ? { ...item, percent: percentage, status: 'uploading' } : item))
                     if (onProgress) {
                         onProgress(percentage, file)
                     }
                 }
             }
         }).then(res => {
+            setFileList(prev => prev.map(item => item.uid === _file.uid ? { ...item, status: 'success', response: res.data } : item))
             onSuccess?.(res.data, file)
             onChange?.(file)
         }).catch(err => {
+            setFileList(prev => prev.map(item => item.uid === _file.uid ? { ...item, status: 'error', error: err } : item))
             onError?.(err, file)
             onChange?.(file)
         })
