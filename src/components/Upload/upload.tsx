@@ -61,6 +61,10 @@ const Upload = ({
             fileInput.current.value = ''
         }
     }
+    const handleRemove = (file: UploadFile) => {
+        setFileList(prev => prev.filter(item => item.uid !== file.uid))
+        onRemove?.(file)
+    }
     const upLoadFiles = (files: FileList) => {
         //把类数组对象 FileList 转换成真正的 Array<File>
         Array.from(files).forEach(file => {
@@ -139,7 +143,7 @@ const Upload = ({
                 name='file' />
             <UpLoadlist
                 fileList={fileList} 
-                onRemove={()=>{}}
+                onRemove={handleRemove}
         />
         </div>
     )

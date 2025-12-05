@@ -5,3 +5,5 @@
 @use "./_animation" as a;
 @use "../components/Input/_style" as inputStyle;
 @use "../components/AutoComplete/_styles.scss" as autoCompleteStyle;
+@use "../components/Upload/_style.scss" as uploadStyle;
+@use "../components/Icon/_style.scss" as iconStyle;
