@@ -1809,6 +1809,8 @@ const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
 
 ### 生命周期
 
+#### upLoadFiles（onProgress+onSuccess+onError）
+
 ```js
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files
@@ -1871,4 +1873,60 @@ const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
 上传文件过大时会触发错误：
 
 请求体过大，服务器拒绝处理
+
+#### beforeUpload（file）
+
+`beforeUpload` 用来在 **文件真正上传之前** 对文件做 **检查或处理**：
+
+- **返回 `boolean`**：用来决定是否继续上传
+  - `true` → 继续上传
+  - `false` → 阻止上传
+- **返回 `Promise<File>`**：可以异步处理文件，比如压缩、转换格式等，然后再上传处理后的文件
+
+```js
+beforeUpload?: (file: File) => boolean | Promise<File>
+```
+
+之前的上传文件逻辑用post封装
+
+```js
+const upLoadFiles = (files: FileList) => {
+        //把类数组对象 FileList 转换成真正的 Array<File>
+        Array.from(files).forEach(file => {
+            if (beforeUpload) {
+                const result = beforeUpload(file)// ← 调用外部传入的函数
+                //异步完成后上传
+                if (result && result instanceof Promise) {
+                    result.then(res => {
+                        post(res)
+                    }).catch(err => {
+                        onError?.(err, file)
+                    })
+                } else if (result) {
+                    post(file)
+                }
+            }
+            //直接上传
+            else {
+                post(file)
+            }
+        })
+    }
+```
+
+#### onChange（file）
+
+`onChange` 是一个 **自定义回调**，用来通知父组件文件的最终状态。
+
+```js
+ }).then(res => {
+            console.log(res.data);
+            onSuccess?.(res.data, file)
+            onChange?.(file)//上传成功后通知外部
+        }).catch(err => {
+            console.log(err);
+            onError?.(err, file)
+            onChange?.(file)//上传失败后也通知外部
+        })
+```
 
