@@ -8,6 +8,38 @@ const uploadMeta: Meta<typeof Upload> = {
     tags: ['autodocs']
 }
 
+const defaultFileList = [
+    {
+        uid: '1',
+        size: 1024 * 1024,
+        name: 'file1.txt',
+        status: 'success',
+        percent: 100,
+        raw: new File([''], 'file1.txt'),
+        response: {
+            id: 1,
+            name: 'file1.txt',
+        },
+    },
+    {
+        uid: '2',
+        size: 1024 * 1024,
+        name: 'file2.txt',
+        status: 'error',
+        percent: 50,
+        raw: new File([''], 'file2.txt'),
+        error: new Error('上传失败'),
+    },
+    {
+        uid: '3',
+        size: 1024 * 1024,
+        name: 'file3.txt',
+        status: 'uploading',
+        percent: 75,
+        raw: new File([''], 'file3.txt'),
+    },
+]
+
 const checkFileSize = (file: File) => {
     if (file.size > 1024 * 1024 * 2) {
         alert('文件大小不能超过2MB');
@@ -48,6 +80,7 @@ const Template = (args: any) => {
             onChange={() => {
                 console.log('文件改变');
             }}
+            defaultFileList={defaultFileList}
         />
     )
 }

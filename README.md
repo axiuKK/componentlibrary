@@ -2081,10 +2081,90 @@ if (percentage < 100) {
             onSuccess?.(res.data, file)
             onChange?.(file)
         }).catch(err => {
-          //geng'xin
+          //更新
             setFileList(prev => prev.map(item => item.uid === _file.uid ? { ...item, status: 'error', error: err } : item))
             onError?.(err, file)
             onChange?.(file)
         })
 ```
 
+#### 显示上传文件列表
+
+不同的文件类型return不同的ui
+
+![image-20251205181914805](assets/image-20251205181914805.png)
+
+#### defaultFileList+onRemove
+
+上传文件前的文件列表和删除键
+
+在uploadList.tsx中定义一个列表组件
+
+```js
+import { type UploadFile } from './upload'
+import { Icon } from '../Icon/icon'
+
+interface UpLoadListProps {
+    fileList: UploadFile[]
+    onRemove: (file: UploadFile) => void
+}
+
+const UpLoadlist = ({
+    fileList,
+    onRemove
+}: UpLoadListProps) => {
+    return (
+        <ul className="upload-list">
+            {fileList.map(item => (
+                <li className='upload-list-item' key={item.uid}>
+                    <span className={`file-name file-name-${item.status}`}>
+                        {item.name}
+                        <Icon icon='file-alt' theme='secondary'></Icon>
+                    </span>
+                    <button onClick={() => onRemove(item)}>删除</button>
+                </li>
+            ))}
+        </ul>
+    )
+}
+
+export default UpLoadlist
+```
+
+在stories中测试不同状态的组件
+
+```js
+const defaultFileList = [
+    {
+        uid: '1',
+        size: 1024 * 1024,
+        name: 'file1.txt',
+        status: 'success',
+        percent: 100,
+        raw: new File([''], 'file1.txt'),
+        response: {
+            id: 1,
+            name: 'file1.txt',
+        },
+    },
+    {
+        uid: '2',
+        size: 1024 * 1024,
+        name: 'file2.txt',
+        status: 'error',
+        percent: 50,
+        raw: new File([''], 'file2.txt'),
+        error: new Error('上传失败'),
+    },
+    {
+        uid: '3',
+        size: 1024 * 1024,
+        name: 'file3.txt',
+        status: 'uploading',
+        percent: 75,
+        raw: new File([''], 'file3.txt'),
+    },
+]
+```
+
+![image-20251205183952066](assets/image-20251205183952066.png)

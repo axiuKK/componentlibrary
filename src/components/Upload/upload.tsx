@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Button } from '../Button/button'
 import { useRef, useState, useEffect } from 'react'
+import UpLoadlist from './upLoadList'
 
 export interface UploadProps {
     action: string
@@ -9,6 +10,8 @@ export interface UploadProps {
     onSuccess?: (data: any, file: File) => void
     onError?: (error: any, file: File) => void
     onChange?: (file: File) => void
+    defaultFileList?: UploadFile[]
+    onRemove?: (file: UploadFile) => void
 }
 export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
 export interface UploadFile {
@@ -32,9 +35,11 @@ const Upload = ({
     onSuccess,
     onError,
     onChange,
+    defaultFileList = [],
+    onRemove,
 }: UploadProps,) => {
     const fileInput = useRef<HTMLInputElement>(null)
-    const [fileList, setFileList] = useState<UploadFile[]>([])
+    const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList)
 
     useEffect(() => {
         console.log('fileList 更新了:', fileList)
@@ -132,6 +137,10 @@ const Upload = ({
                 onChange={handleFileChange}
                 type='file'
                 name='file' />
+            <UpLoadlist
+                fileList={fileList} 
+                onRemove={()=>{}}
+        />
         </div>
     )
 }
