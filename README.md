@@ -1930,3 +1930,54 @@ const upLoadFiles = (files: FileList) => {
         })
 ```
 
+#### 测试中没有成功 `alert('文件大小不能超过2MB')`
+
+```js
+const checkFileSize = (file: File) => {
+    if (file.size > 1024 * 1024 * 2) {
+        console.log('文件大小为:', file.size);
+        alert('文件大小不能超过2MB');
+        return false;
+    } else {
+        console.log('此时return true');
+        return true;
+    }
+
+}
+```
+
+```js
+export const boolBeforeUpload: Story = {
+    render: Template,
+    args: {
+        beforeUpload: checkFileSize,
+    }
+}
+```
+
+通过consolelog发现beforeUpload没有被传入
+
+```js
+const Template = (args: any) => {
+    return (
+        <Upload
+            {...args}//没有传入参数
+            action='https://jsonplaceholder.typicode.com/posts'
+            onProgress={(percentage) => {
+                console.log(percentage);
+            }}
+            onSuccess={() => {
+                console.log('上传成功');
+            }}
+            onError={() => {
+                console.log('上传失败');
+            }}
+            onChange={() => {
+                console.log('文件改变');
+            }}
+        />
+    )
+}
+```
+
+问题是：没有在模板参数中传入args，导致只能传入写死的参数，beforeUpload没有被传入也就不会打印alert

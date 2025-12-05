@@ -10,11 +10,9 @@ const uploadMeta: Meta<typeof Upload> = {
 
 const checkFileSize = (file: File) => {
     if (file.size > 1024 * 1024 * 2) {
-        console.log('文件大小为:', file.size);
         alert('文件大小不能超过2MB');
         return false;
     } else {
-        console.log('此时return true');
         return true;
     }
 
