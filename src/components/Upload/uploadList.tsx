@@ -1,5 +1,6 @@
 import { type UploadFile } from './upload'
 import { Icon } from '../Icon/icon'
+import Progress from '../Progress/progress'
 
 interface UpLoadListProps {
     fileList: UploadFile[]
@@ -21,11 +22,16 @@ const UpLoadlist = ({
                     <span className='file-status'>
                         {item.status === 'success' && <Icon icon='check-circle' theme='success'></Icon>}
                         {item.status === 'error' && <Icon icon='times-circle' theme='danger'></Icon>}
-                        {item.status === 'uploading' && <Icon icon='spinner' theme='primary'></Icon>}
+                        {item.status === 'uploading' && <Icon icon='spinner' spin theme='primary'></Icon>}
                     </span>
                     <span className='file-actions'>
                         <Icon icon='times' theme='info' onClick={() => onRemove(item)}></Icon>
                     </span>
+                    {item.status === 'uploading' && (
+                        <Progress
+                            percent={item.percent || 0}
+                        />
+                    )}
                 </li>
             ))}
         </ul>

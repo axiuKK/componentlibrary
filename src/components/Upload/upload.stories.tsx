@@ -49,8 +49,8 @@ const defaultFileList = [
 ]
 
 const checkFileSize = (file: File) => {
-    if (file.size > 1024 * 1024 * 2) {
-        alert('文件大小不能超过2MB');
+    if (file.size > 1024 * 1024 * 10) {
+        alert('文件大小不能超过10MB');
         return false;
     } else {
         return true;
@@ -62,7 +62,7 @@ const filePromise = (file: File) => {
         if (checkFileSize(file)) {
             resolve(file);
         } else {
-            reject(new Error('文件大小超过2MB'));
+            reject(new Error('文件大小超过10MB'));
         }
     })
 }
@@ -108,5 +108,14 @@ export const asyncBeforeUpload: Story = {
     render: Template,
     args: {
         beforeUpload: filePromise,
+    }
+}
+
+//测试进度条，上传较大文件
+export const progressUpload: Story = {
+    render: Template,
+    args: {
+        beforeUpload: filePromise,
+        action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
     }
 }

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Button } from '../Button/button'
 import { useRef, useState, useEffect } from 'react'
-import UpLoadlist from './upLoadList'
+import UploadList from './uploadList'   
 
 export interface UploadProps {
     action: string
@@ -141,7 +141,7 @@ const Upload = ({
                 onChange={handleFileChange}
                 type='file'
                 name='file' />
-            <UpLoadlist
+            <UploadList
                 fileList={fileList} 
                 onRemove={handleRemove}
         />
