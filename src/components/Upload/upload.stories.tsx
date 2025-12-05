@@ -16,6 +16,15 @@ const Template = () => {
     return(
         <Upload
         action='https://jsonplaceholder.typicode.com/posts'
+        onProgress={(percentage, file) => {
+            console.log(percentage, file);
+        }}
+        onSuccess={(data, file) => {
+            console.log(data, file);
+        }}
+        onError={(error, file) => {
+            console.log(error, file);
+        }}
         />
     )
 }

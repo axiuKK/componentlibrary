@@ -1806,3 +1806,69 @@ const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
 
 - `FormData` 是浏览器提供的 **API，用于封装表单数据**，尤其适合上传文件。
 - 可以向里面追加文件、文本等，发送给服务器时会自动封装成 `multipart/form-data`。
+
+### 生命周期
+
+```js
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files
+        if (!files) {
+            return
+        }
+        upLoadFiles(files)
+        if (fileInput.current) {
+            fileInput.current.value = ''
+        }
+    }
+    const upLoadFiles = (files: FileList) => {
+        //把类数组对象 FileList 转换成真正的 Array<File>
+        Array.from(files).forEach(file => {
+            const formData = new FormData()
+            formData.append(file.name, file)
+            //并发上传
+            axios.post(action, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                //实时监听文件上传进度，并把当前完成百分比通知给组件外部
+                onUploadProgress: (e) => {
+                    // 每次上传有进度变化就会执行
+                    let percentage = e.total ? Math.round((e.loaded * 100) / e.total) : 0
+                //防止与onSuccess冲突，只在进度不是100%时调用onProgress
+                    if(percentage<100) {
+                        if(onProgress) {
+                            onProgress(percentage, file)
+                        }
+                    }
+                }
+            }).then(res => {
+                console.log(res.data);
+                onSuccess?.(res.data, file)
+            }).catch(err => {
+                console.log(err);
+                onError?.(err, file)
+            })
+        })
+    }
+```
+
+- `onUploadProgress` 是 **Axios 提供的一个配置回调函数**，用于**在文件上传过程中实时获取“网络传输进度”**。
+
+浏览器每上传一部分数据，就会触发一次这个回调。
+
+- `ProgressEvent` 是浏览器内置类型
+
+当文件、网络数据上传 / 下载时：浏览器底层会不断创建 `ProgressEvent`，并把它丢给 `onUploadProgress`
+
+- 100% === 上传完成事件与成功回调**几乎同时触发**
+
+如果 **不加 `<100` 限制**：UI 会收到 2 次完成
+
+所以只把 1~99% 交给进度回调，100% 由 onSuccess 控制
+
+![image-20251205130447316](assets/image-20251205130447316.png)
+
+上传文件过大时会触发错误：
+
+请求体过大，服务器拒绝处理
+
