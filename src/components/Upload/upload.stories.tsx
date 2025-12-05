@@ -89,6 +89,13 @@ const Template = (args: any) => {
                 console.log('文件改变');
             }}
             defaultFileList={defaultFileList}
+            name='filename'
+            data={{
+                token: '123456',
+            }}
+            headers={{
+                'X-Powered-By': 'Bearer 123456',
+            }}
         />
     )
 }

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Button } from '../Button/button'
 import { useRef, useState, useEffect } from 'react'
-import UploadList from './uploadList'   
+import UploadList from './uploadList'
 
 export interface UploadProps {
     action: string
@@ -12,6 +12,11 @@ export interface UploadProps {
     onChange?: (file: File) => void
     defaultFileList?: UploadFile[]
     onRemove?: (file: UploadFile) => void
+    //自定义HTTP post请求
+    headers?: { [key: string]: string }
+    name?: string
+    data?: { [key: string]: string }
+    withCredentials?: boolean
 }
 export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
 export interface UploadFile {
@@ -37,6 +42,10 @@ const Upload = ({
     onChange,
     defaultFileList = [],
     onRemove,
+    headers,
+    name = 'file',
+    data,
+    withCredentials,
 }: UploadProps,) => {
     const fileInput = useRef<HTMLInputElement>(null)
     const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList)
@@ -98,12 +107,19 @@ const Upload = ({
         }
         setFileList(prev => [...prev, _file])
         const formData = new FormData()
-        formData.append(file.name, file)
+        formData.append(name || 'file', file)
+        if (data) {
+            Object.keys(data).forEach(key => {
+                formData.append(key, data[key])
+            })
+        }
         //并发上传
         axios.post(action, formData, {
             headers: {
+                ...headers,
                 'Content-Type': 'multipart/form-data'
             },
+            withCredentials,
             //实时监听文件上传进度，并把当前完成百分比通知给组件外部
             onUploadProgress: (e) => {
                 // 每次上传有进度变化就会执行
@@ -142,9 +158,9 @@ const Upload = ({
                 type='file'
                 name='file' />
             <UploadList
-                fileList={fileList} 
+                fileList={fileList}
                 onRemove={handleRemove}
-        />
+            />
         </div>
     )
 }

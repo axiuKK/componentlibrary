@@ -2231,3 +2231,33 @@ export default Progress
 ```
 
 ![image-20251205204600956](assets/image-20251205204600956.png)
+
+### 自定义HTTP post请求
+
+```js
+//自定义HTTP post请求
+    headers?: { [key: string]: string }
+    name?: string
+    data?: { [key: string]: string }
+    withCredentials?: boolean
+```
+
+自定义header、name、post fromData、cookie
+
+`withCredentials` 的作用是控制跨域请求时是否带上 **浏览器的 Cookie、HTTP 认证信息**。
+
+```js
+            name='filename'
+            data={{
+                token: '123456',
+            }}
+            headers={{
+                'X-Powered-By': 'Bearer 123456',
+            }}
+```
+
+请求头中成功写入自定义属性
+
+![image-20251205211124109](assets/image-20251205211124109.png)
+
+![image-20251205211026847](assets/image-20251205211026847.png)
