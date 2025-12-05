@@ -1693,6 +1693,8 @@ start->点击按钮选择文件->beforeUpload(file)->onProgress(event.file)->onC
 
 beforeUpload(file)上传前检查文件大小、类型是否符合
 
+onProgress(event.file)：文件上传进度
+
 另外还需要后端接口action属性
 
 ### 前后端通信
