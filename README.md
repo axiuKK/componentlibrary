@@ -1981,3 +1981,56 @@ const Template = (args: any) => {
 ```
 
 问题是：没有在模板参数中传入args，导致只能传入写死的参数，beforeUpload没有被传入也就不会打印alert
+
+### ui显示
+
+文件状态：显示加载进度、上传状态、删除按钮
+
+```js
+export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
+export interface UploadFile {
+    uid: string
+    size: number
+    name: string
+    status?: UploadFileStatus
+    percent?: number
+    //原始文件
+    raw?: File
+    //上传成功后返回的数据
+    response?: any
+    //上传失败后返回的错误信息
+    error?: any
+}
+```
+
+使用state保存状态
+
+```js
+const [fileList, setFileList] = useState<UploadFile[]>([])
+```
+
+在post中更新fileList
+
+```js
+let _file: UploadFile = {
+            uid: Date.now().toString(),
+            status: 'ready',
+            size: file.size,
+            name: file.name,
+            percent: 0,
+            raw: file,
+        }
+        setFileList(prev => [...prev, _file])
+```
+
+监听fileList的变化并打印
+
+```js
+useEffect(() => {
+        console.log('fileList 更新了:', fileList)
+    }, [fileList])
+```
+
+成功打印fileList
+
+![image-20251205165623893](assets/image-20251205165623893.png)

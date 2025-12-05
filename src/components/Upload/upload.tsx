@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Button } from '../Button/button'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
 export interface UploadProps {
     action: string
@@ -9,6 +9,20 @@ export interface UploadProps {
     onSuccess?: (data: any, file: File) => void
     onError?: (error: any, file: File) => void
     onChange?: (file: File) => void
+}
+export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
+export interface UploadFile {
+    uid: string
+    size: number
+    name: string
+    status?: UploadFileStatus
+    percent?: number
+    //原始文件
+    raw?: File
+    //上传成功后返回的数据
+    response?: any
+    //上传失败后返回的错误信息
+    error?: any
 }
 
 const Upload = ({
@@ -20,6 +34,12 @@ const Upload = ({
     onChange,
 }: UploadProps,) => {
     const fileInput = useRef<HTMLInputElement>(null)
+    const [fileList, setFileList] = useState<UploadFile[]>([])
+
+    useEffect(() => {
+        console.log('fileList 更新了:', fileList)
+    }, [fileList])
+
 
     const handleClick = () => {
         if (fileInput.current) {
@@ -59,6 +79,15 @@ const Upload = ({
         })
     }
     const post = (file: File) => {
+        let _file: UploadFile = {
+            uid: Date.now().toString(),
+            status: 'ready',
+            size: file.size,
+            name: file.name,
+            percent: 0,
+            raw: file,
+        }
+        setFileList(prev => [...prev, _file])
         const formData = new FormData()
         formData.append(file.name, file)
         //并发上传
