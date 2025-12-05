@@ -2261,3 +2261,18 @@ export default Progress
 ![image-20251205211124109](assets/image-20251205211124109.png)
 
 ![image-20251205211026847](assets/image-20251205211026847.png)
+
+### 自定义input属性
+
+添加multiple、accept实现上传多个文件、筛选文件格式
+
+这些都是input的原生属性，所以只需要实现动态即可
+
+```js
+accept='.png'
+            multiple={true}
+```
+
+只支持png文件上传、可上传多个文件
+
+![image-20251205212325876](assets/image-20251205212325876.png)

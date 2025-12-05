@@ -17,6 +17,8 @@ export interface UploadProps {
     name?: string
     data?: { [key: string]: string }
     withCredentials?: boolean
+    accept?: string
+    multiple?: boolean
 }
 export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
 export interface UploadFile {
@@ -46,6 +48,8 @@ const Upload = ({
     name = 'file',
     data,
     withCredentials,
+    accept,
+    multiple = true,
 }: UploadProps,) => {
     const fileInput = useRef<HTMLInputElement>(null)
     const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList)
@@ -155,8 +159,10 @@ const Upload = ({
                 style={{ display: 'none' }}
                 ref={fileInput}
                 onChange={handleFileChange}
+                accept={accept}
+                multiple={multiple}
                 type='file'
-                name='file' />
+                name={name} />
             <UploadList
                 fileList={fileList}
                 onRemove={handleRemove}

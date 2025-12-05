@@ -6,12 +6,12 @@ const uploadMeta: Meta<typeof Upload> = {
     component: Upload,
     // 上传组件的宽度
     decorators: [
-    (Story) => (
-      <div style={{ width: 400 }}>
-        <Story />
-      </div>
-    ),
-  ],
+        (Story) => (
+            <div style={{ width: 400 }}>
+                <Story />
+            </div>
+        ),
+    ],
     //启用自动文档
     tags: ['autodocs']
 }
@@ -96,6 +96,8 @@ const Template = (args: any) => {
             headers={{
                 'X-Powered-By': 'Bearer 123456',
             }}
+            accept='.png'
+            multiple={true}
         />
     )
 }
