@@ -2276,3 +2276,83 @@ accept='.png'
 只支持png文件上传、可上传多个文件
 
 ![image-20251205212325876](assets/image-20251205212325876.png)
+
+### 拖拽上传
+
+首先将Button组件换成div，传入children，可以通过children控制样式（图标+文字）![image-20251207231247037](assets/image-20251207231247037.png)
+
+```js
+<div className="upload-component">
+            <div className="upload-input"
+                style={{ display: 'inline-block' }}
+                onClick={handleClick}>
+                {drag ?
+                    <Dragger onFile={(files)=>{upLoadFiles(files)}}>
+                        {children}
+                    </Dragger> :
+                    children
+                }
+```
+
+在dragger.tsx中
+
+拖拽用const [dragOver, setDragOver] = useState(false)实现，在离开和进来时改变状态
+
+文件使用onDrop绑定事件处理函数，onFile把拖进来的文件交给上传逻辑处理
+
+```js
+import { useState } from 'react'
+import classNames from 'classnames'
+import type { ReactNode, DragEvent } from 'react'
+
+interface DraggerProps {
+    onFile: (files: FileList) => void;
+    children?: ReactNode
+}
+
+const Dragger = ({
+    onFile,
+    children,
+}: DraggerProps) => {
+    const [dragOver, setDragOver] = useState(false)
+
+    const classes = classNames('uploader-dragger', {
+        'is-dragover': dragOver
+    })
+
+    const handleDrop = (e: DragEvent<HTMLElement>) => {
+        e.preventDefault()
+        setDragOver(false)
+        onFile(e.dataTransfer.files)
+    }
+    const handleDrag = (e: DragEvent<HTMLElement>, over: boolean) => {
+        e.preventDefault()
+        setDragOver(over)
+    }
+    return (
+        <div
+            className={classes}
+            onDragOver={e => { handleDrag(e, true) }}
+            onDragLeave={e => { handleDrag(e, false) }}
+            onDrop={handleDrop}
+        >
+            {children}
+        </div>
+    )
+}
+
+export default Dragger;
+```
+
+在测试文件中对children添加样式
+
+```js
+children={<div>
+                <Icon icon="upload" size="5x" theme="secondary" />
+                <br />
+                <p>点击或者拖动到此区域进行上传</p>
+            </div>}
+            drag={true}
+```
+
+![image-20251207232027750](assets/image-20251207232027750.png)

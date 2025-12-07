@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { Button } from '../Button/button'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, type ReactNode } from 'react'
 import UploadList from './uploadList'
+import Dragger from './dragger'
 
 export interface UploadProps {
     action: string
@@ -19,6 +19,8 @@ export interface UploadProps {
     withCredentials?: boolean
     accept?: string
     multiple?: boolean
+    children?: ReactNode
+    drag?: boolean
 }
 export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
 export interface UploadFile {
@@ -50,6 +52,8 @@ const Upload = ({
     withCredentials,
     accept,
     multiple = true,
+    children = '上传文件',
+    drag = true,
 }: UploadProps,) => {
     const fileInput = useRef<HTMLInputElement>(null)
     const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList)
@@ -149,20 +153,25 @@ const Upload = ({
 
     return (
         <div className="upload-component">
-            <Button
-                btnType='primary'
+            <div className="upload-input"
+                style={{ display: 'inline-block' }}
                 onClick={handleClick}>
-                上传文件
-            </Button>
-            <input
-                className='file-input'
-                style={{ display: 'none' }}
-                ref={fileInput}
-                onChange={handleFileChange}
-                accept={accept}
-                multiple={multiple}
-                type='file'
-                name={name} />
+                {drag ?
+                    <Dragger onFile={(files)=>{upLoadFiles(files)}}>
+                        {children}
+                    </Dragger> :
+                    children
+                }
+                <input
+                    className='file-input'
+                    style={{ display: 'none' }}
+                    ref={fileInput}
+                    onChange={handleFileChange}
+                    accept={accept}
+                    multiple={multiple}
+                    type='file'
+                    name={name} />
+            </div>
             <UploadList
                 fileList={fileList}
                 onRemove={handleRemove}

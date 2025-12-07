@@ -1,3 +1,4 @@
+import Icon from '../Icon/icon'
 import Upload from './upload'
 import { type Meta, type StoryObj } from '@storybook/react'
 
@@ -98,6 +99,12 @@ const Template = (args: any) => {
             }}
             accept='.png'
             multiple={true}
+            children={<div>
+                <Icon icon="upload" size="5x" theme="secondary" />
+                <br />
+                <p>点击或者拖动到此区域进行上传</p>
+            </div>}
+            drag={true}
         />
     )
 }
