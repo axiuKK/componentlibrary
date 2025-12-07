@@ -32,5 +32,5 @@
     "src",
     "tests/components/sum/sum.test.js",
     "tests/components/Input/input.test.tsx"
-, "tests/components/AutoComplete/autoComplete.test.tsx"  ]
+, "tests/components/AutoComplete/autoComplete.test.tsx", "tests/components/Upload/upload.test.tsx"  ]
 }

@@ -2380,3 +2380,5 @@ const handleDragEnter = (e: DragEvent<HTMLElement>) => {
     }
 ```
 
+### 测试异步代码
+
