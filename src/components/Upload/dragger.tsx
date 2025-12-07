@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import classNames from 'classnames'
 import type { ReactNode, DragEvent } from 'react'
 
@@ -12,6 +12,7 @@ const Dragger = ({
     children,
 }: DraggerProps) => {
     const [dragOver, setDragOver] = useState(false)
+    const dragCounter = useRef(0)
 
     const classes = classNames('uploader-dragger', {
         'is-dragover': dragOver
@@ -19,18 +20,35 @@ const Dragger = ({
 
     const handleDrop = (e: DragEvent<HTMLElement>) => {
         e.preventDefault()
+        dragCounter.current = 0
         setDragOver(false)
         onFile(e.dataTransfer.files)
     }
-    const handleDrag = (e: DragEvent<HTMLElement>, over: boolean) => {
+    const handleDragEnter = (e: DragEvent<HTMLElement>) => {
         e.preventDefault()
-        setDragOver(over)
+        dragCounter.current += 1
+        setDragOver(true)
     }
+
+    const handleDragLeave = (e: DragEvent<HTMLElement>) => {
+        e.preventDefault()
+        dragCounter.current -= 1
+
+        if (dragCounter.current === 0) {
+            setDragOver(false)
+        }
+    }
+
+    const handleDragOver = (e: DragEvent<HTMLElement>) => {
+        e.preventDefault()
+    }
+
     return (
         <div
             className={classes}
-            onDragOver={e => { handleDrag(e, true) }}
-            onDragLeave={e => { handleDrag(e, false) }}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
             onDrop={handleDrop}
         >
             {children}

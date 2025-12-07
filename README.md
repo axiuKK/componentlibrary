@@ -2356,3 +2356,27 @@ children={<div>
 ```
 
 ![image-20251207232027750](assets/image-20251207232027750.png)
+
+#### 抖动问题
+
+使用 `dragEnter / dragLeave` + 计数器
+
+利用**进入次数计数法**来防止误触发：
+
+```js
+const handleDragEnter = (e: DragEvent<HTMLElement>) => {
+        e.preventDefault()
+        dragCounter.current += 1
+        setDragOver(true)
+    }
+
+    const handleDragLeave = (e: DragEvent<HTMLElement>) => {
+        e.preventDefault()
+        dragCounter.current -= 1
+
+        if (dragCounter.current === 0) {
+            setDragOver(false)
+        }
+    }
+```
+
