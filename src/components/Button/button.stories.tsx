@@ -1,5 +1,6 @@
 import { Button } from "./button";
 import { type Meta, type StoryObj } from "@storybook/react";
+import Icon from "../Icon/icon";
 
 //Meta<组件类型> 定义了组件的元数据，包括标题、组件类型等
 const buttonMeta: Meta<typeof Button> = {
@@ -23,6 +24,7 @@ export const Default: Story = {
   render: Template,
   args: {
     children: "Default Button",
+    ariaLabel: false,
   },
 };
 
@@ -31,6 +33,7 @@ export const Primary: Story = {
   args: {
     children: "Primary Button",
     btnType: "primary",
+    ariaLabel: false,
   },
 };
 
@@ -39,6 +42,7 @@ export const Danger: Story = {
   args: {
     children: "Danger Button",
     btnType: "danger",
+    ariaLabel: false,
   },
 };
 
@@ -48,6 +52,7 @@ export const Link: Story = {
     children: "Link Button",
     btnType: "link",
     href: "www.baidu.com",
+    ariaLabel: false,
   },
 };
 
@@ -56,6 +61,14 @@ export const Disabled: Story = {
   args: {
     children: "Disabled Button",
     disabled: true,
+    ariaLabel: false,
+  },
+};
+
+export const IconOnly = {
+  args: {
+    children: <Icon icon="search" />,
+    ariaLabel: "搜索",
   },
 };
 

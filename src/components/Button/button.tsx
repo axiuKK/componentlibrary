@@ -14,7 +14,8 @@ interface BaseButtonProps {
   btnType?: ButtonType;
   href?: string;
   // 超级联合类型
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  ariaLabel?: string | false;
 }
 
 //继承原生属性+Parial将属性都改成可选的
@@ -35,6 +36,7 @@ export const Button = ({
   children,
   href,
   onClick,
+  ariaLabel,
   ...restProps
 }: ButtonProps) => {
   // btn, btn-lg, btn-primary 拼接class
@@ -45,6 +47,35 @@ export const Button = ({
     [`btn-${size}`]: size,
     disabled: btnType === "link" && disabled,
   });
+
+  let finalAriaLabel: string | undefined;
+
+  if (ariaLabel === false) {
+    // 用户明确说“不需要”，就不设 aria-label
+    finalAriaLabel = undefined;
+  } else if (typeof ariaLabel === "string") {
+    // 用户提供了自定义 label
+    finalAriaLabel = ariaLabel;
+  } else {
+    // 用户没传 ariaLabel → 我们自动检测 children 是否有文本
+    const hasVisibleText =
+      typeof children === "string" && children.trim() !== "";
+    if (!hasVisibleText) {
+      // ⚠️ 开发环境警告：缺少 ariaLabel
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          "Button with non-text content should provide an `ariaLabel` for accessibility.",
+        );
+      }
+      // 但不要强制中断，保持向后兼容
+      finalAriaLabel = undefined;
+    } else {
+      // 有文本 → 不需要 aria-label
+      finalAriaLabel = undefined;
+    }
+  }
+  const ariaLabelProp =
+    typeof finalAriaLabel === "string" ? { "aria-label": finalAriaLabel } : {};
 
   // 处理键盘事件
   const handleKeyDownButton = (e: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -79,6 +110,7 @@ export const Button = ({
           href={href}
           onClick={onClick}
           onKeyDown={handleKeyDownAnchor}
+          {...ariaLabelProp}
           {...restProps}
         >
           {children}
@@ -92,6 +124,7 @@ export const Button = ({
         disabled={disabled}
         onClick={onClick}
         onKeyDown={handleKeyDownButton}
+        {...ariaLabelProp}
         {...restProps}
       >
         {children}
