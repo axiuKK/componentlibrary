@@ -48,6 +48,7 @@ export default defineConfig({
         extends: true,
         test: {
           include: ["tests/**/*.test.{ts,tsx}", "src/**/*.test.tsx"],
+          exclude: ["**/*.stories.tsx"],
           globals: true,
           environment: "jsdom",
         },

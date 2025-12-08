@@ -45,11 +45,19 @@ export const Button = ({
     disabled: btnType === "link" && disabled,
   });
   if (btnType === "link" && href) {
-    return (
-      <a className={classes} href={href} {...restProps}>
-        {children}
-      </a>
-    );
+    if (disabled) {
+      return (
+        <span className={classes} {...restProps}>
+          {children}
+        </span>
+      );
+    } else {
+      return (
+        <a className={classes} href={href} {...restProps}>
+          {children}
+        </a>
+      );
+    }
   } else {
     return (
       <button className={classes} disabled={disabled} {...restProps}>
