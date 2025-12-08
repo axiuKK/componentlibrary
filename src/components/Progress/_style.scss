@@ -2,52 +2,52 @@
 @use "sass:color";
 
 .progress-bar {
-    width: 100%;
-    box-sizing: border-box;
+  width: 100%;
+  box-sizing: border-box;
 
-    .progress-bar-outer {
-        border-radius: vars.$progress-border-radius;
-        background-color: vars.$progress-bg;
-        overflow: hidden;
-        position: relative;
+  .progress-bar-outer {
+    border-radius: vars.$progress-border-radius;
+    background-color: vars.$progress-bg;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-bar-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    border-radius: vars.$progress-border-radius;
+    line-height: 1;
+    transition: vars.$progress-bar-transition;
+
+    .inner-text {
+      color: vars.$progress-bar-color;
+      font-size: vars.$progress-font-size;
+      margin: 0 5px;
     }
+  }
 
-    .progress-bar-inner {
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        height: 100%;
-        border-radius: vars.$progress-border-radius;
-        line-height: 1;
-        transition: vars.$progress-bar-transition;
+  .color-primary {
+    background-color: #1677ff;
+  }
 
-        .inner-text {
-            color: vars.$progress-bar-color;
-            font-size: vars.$progress-font-size;
-            margin: 0 5px;
-        }
-    }
+  .color-success {
+    background-color: #52c41a;
+  }
 
-    .color-primary {
-        background-color: #1677ff;
-    }
+  .color-danger {
+    background-color: #ff4d4f;
+  }
 
-    .color-success {
-        background-color: #52c41a;
-    }
+  .color-warning {
+    background-color: #faad14;
+  }
 
-    .color-danger {
-        background-color: #ff4d4f;
-    }
-
-    .color-warning {
-        background-color: #faad14;
-    }
-
-    .color-info {
-        background-color: #909399;
-    }
+  .color-info {
+    background-color: #909399;
+  }
 }

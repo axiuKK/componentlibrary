@@ -1,98 +1,82 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import Input from './input';
-import { useState } from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import Input from "./input";
+import { useState } from "react";
 
 const inputMeta: Meta<typeof Input> = {
-  title: 'input',
+  title: "input",
   component: Input,
-  tags: ['autodocs']
-}
+  tags: ["autodocs"],
+};
 
-export default inputMeta
+export default inputMeta;
 
-type Story = StoryObj<typeof Input>
+type Story = StoryObj<typeof Input>;
 
 const Template = (args: React.ComponentProps<typeof Input>) => (
   <Input {...args} />
-)
+);
 
 export const Default: Story = {
   render: Template,
   args: {
-    placeholder: 'Default Menu',
+    placeholder: "Default Menu",
   },
-}
+};
 
 export const Disabled: Story = {
   render: Template,
   args: {
-    placeholder: 'Disabled Menu',
+    placeholder: "Disabled Menu",
     disabled: true,
   },
-}
+};
 
 export const IconInput: Story = {
   args: {
-    placeholder: '带图标input',
-    icon: 'search',
+    placeholder: "带图标input",
+    icon: "search",
   },
   render: Template,
-}
+};
 
 export const SizeInput: Story = {
   args: {
-    placeholder: '带大小的input',
-  },
-  render: ()=>{
-    return(
-      <div>
-        <Input
-          defaultValue="large size"
-          size="lg"
-        />
-        <Input
-          placeholder="small size"
-          size="sm"
-        />
-      </div>
-    )
-  },
-}
-
-export const EPandInput: Story = {
-  args: {
-    placeholder: '带前后缀的input',
+    placeholder: "带大小的input",
   },
   render: () => {
     return (
       <div>
-        <Input
-          defaultValue="prepend text"
-          prepend="https://"
-        />
-        <Input
-          defaultValue="google"
-          append=".com"
-        />
+        <Input defaultValue="large size" size="lg" />
+        <Input placeholder="small size" size="sm" />
       </div>
-    )
+    );
   },
-}
+};
+
+export const EPandInput: Story = {
+  args: {
+    placeholder: "带前后缀的input",
+  },
+  render: () => {
+    return (
+      <div>
+        <Input defaultValue="prepend text" prepend="https://" />
+        <Input defaultValue="google" append=".com" />
+      </div>
+    );
+  },
+};
 
 const ControlledTemplate = (args: React.ComponentProps<typeof Input>) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   return (
-    <Input
-      {...args}
-      value={value}
-      onChange={e => setValue(e.target.value)}
-    />
+    <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
   );
 };
 
 export const ControlledInput: Story = {
   render: ControlledTemplate,
   args: {
-    placeholder: '这是一个受控组件',
+    placeholder: "这是一个受控组件",
   },
 };

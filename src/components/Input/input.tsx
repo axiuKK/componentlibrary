@@ -1,11 +1,14 @@
-import type { InputHTMLAttributes, ChangeEvent, ReactElement } from 'react'
-import classNames from 'classnames'
-import type { IconProp } from '@fortawesome/fontawesome-svg-core'
-import Icon from '../Icon/icon'
+import type { InputHTMLAttributes, ChangeEvent, ReactElement } from "react";
+import classNames from "classnames";
+import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import Icon from "../Icon/icon";
 
-type InputSize = 'lg' | 'sm'
+type InputSize = "lg" | "sm";
 //omit忽略接口中的size属性，因为我们自己定义了size属性
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface InputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "size"
+> {
   /**是否禁用 Input */
   disabled?: boolean;
   /**设置 input 大小，支持 lg 或者是 sm */
@@ -21,12 +24,12 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 
 /**
  * Input 输入框 通过鼠标或键盘输入内容，是最基础的表单域的包装。
- * 
+ *
  * ~~~js
  * // 这样引用
  * import { Input } from 'vikingship'
  * ~~~
- * 
+ *
  * 支持 HTMLInput 的所有基本属性
  */
 export const Input = ({
@@ -38,27 +41,27 @@ export const Input = ({
   style,
   ...restProps
 }: InputProps) => {
-  const classes = classNames('input-wrapper', {
+  const classes = classNames("input-wrapper", {
     [`input-size-${size}`]: size,
-    'disabled': disabled,
-    'input-group': prepend || append,
+    disabled: disabled,
+    "input-group": prepend || append,
     //!!转化为bool值
-    'input-group-append': !!append,
-    'input-group-prepend': !!prepend
-  })
+    "input-group-append": !!append,
+    "input-group-prepend": !!prepend,
+  });
 
   return (
     <div className={classes} style={style}>
       {prepend && <div className="input-group-prepend">{prepend}</div>}
-      {icon && <div className="icon-wrapper"><Icon icon={icon} title={`title-${icon}`} /></div>}
-      <input
-        className="input-inner"
-        disabled={disabled}
-        {...restProps}
-      />
+      {icon && (
+        <div className="icon-wrapper">
+          <Icon icon={icon} title={`title-${icon}`} />
+        </div>
+      )}
+      <input className="input-inner" disabled={disabled} {...restProps} />
       {append && <div className="input-group-append">{append}</div>}
     </div>
-  )
-}
+  );
+};
 
 export default Input;

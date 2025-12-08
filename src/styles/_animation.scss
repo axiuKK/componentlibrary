@@ -1,7 +1,6 @@
-@use './mixin' as m;
+@use "./mixin" as m;
 
-@include m.zoom-animation('top', scaleY(0), scaleY(1), center top);
-@include m.zoom-animation('bottom', scaleY(0), scaleY(1), center bottom);
-@include m.zoom-animation('left', scaleX(0), scaleX(1), center left);
-@include m.zoom-animation('right', scaleX(0), scaleX(1), center right);
-
+@include m.zoom-animation("top", scaleY(0), scaleY(1), center top);
+@include m.zoom-animation("bottom", scaleY(0), scaleY(1), center bottom);
+@include m.zoom-animation("left", scaleX(0), scaleX(1), center left);
+@include m.zoom-animation("right", scaleX(0), scaleX(1), center right);

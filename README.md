@@ -48,14 +48,10 @@ npm install classnames
 用法：根据你给按钮的配置，决定要加哪些 CSS 类名
 
 ```js
-classNames(
-  固定class,
-  可选class,
-  {
-    "class-名字": 条件,
-    "class-名字": 条件
-  }
-)
+classNames(固定class, 可选class, {
+  "class-名字": 条件,
+  "class-名字": 条件,
+});
 ```
 
 条件为 **true** → 加这个 class
@@ -80,7 +76,7 @@ classNames(
 - 可以自定义样式（className）
 - 支持子内容（children）
 
-------
+---
 
 2️⃣ 定义类型（TypeScript）
 
@@ -107,18 +103,18 @@ interface BaseButtonProps {
 - **href** → 链接按钮地址
 - **className** → 用户自定义样式
 
-------
+---
 
 3️⃣ 拼 className 样式
 
 用 `classnames` 根据条件拼接 class：
 
 ```js
-const classes = classNames('btn', className, {
+const classes = classNames("btn", className, {
   [`btn-${btnType}`]: btnType,
   [`btn-${size}`]: size,
-  'disabled': btnType === 'link' && disabled
-})
+  disabled: btnType === "link" && disabled,
+});
 ```
 
 - `btn` → 基础样式
@@ -127,17 +123,25 @@ const classes = classNames('btn', className, {
 - `disabled` → 链接禁用样式
 - 支持额外 `className`
 
-------
+---
 
 4️⃣ 判断渲染哪种 HTML 标签+设置默认值
 
 ```js
-if (btnType === 'link' && href) {
+if (btnType === "link" && href) {
   // 链接按钮
-  return <a className={classes} href={href} {...restProps}>{children}</a>
+  return (
+    <a className={classes} href={href} {...restProps}>
+      {children}
+    </a>
+  );
 } else {
   // 普通按钮
-  return <button className={classes} disabled={disabled} {...restProps}>{children}</button>
+  return (
+    <button className={classes} disabled={disabled} {...restProps}>
+      {children}
+    </button>
+  );
 }
 ```
 
@@ -215,7 +219,7 @@ Button.defaultProps = {
 export default Button
 ```
 
-------
+---
 
 6️⃣ 使用方法示例
 
@@ -227,7 +231,7 @@ export default Button
 <Button btnType="link" href="https://example.com" disabled>禁用链接</Button>
 ```
 
-------
+---
 
 7️⃣ 总结流程思路
 
@@ -250,7 +254,7 @@ type ButtonProps = ButtonHTMLProps | AnchorHTMLProps;
 - 解释：这个 ButtonProps **可能是按钮属性，也可能是链接属性**
 - 缺点：访问属性时 TypeScript 可能不确定类型，需要做类型判断
 
-------
+---
 
 方法二：交叉类型（Intersection Type） —— 更常用
 
@@ -309,17 +313,17 @@ npm install --save-dev @testing-library/react @testing-library/jest-dom jsdom
 
 ```js
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   test: {
-    globals: true,          // 可以直接使用 test/expect
-    environment: "jsdom",   // 模拟浏览器环境
-  }
-})
+    globals: true, // 可以直接使用 test/expect
+    environment: "jsdom", // 模拟浏览器环境
+  },
+});
 ```
 
 安装jest-dom
@@ -338,7 +342,7 @@ npm install --save-dev @testing-library/jest-dom
 
 要将Menu的props传入MenuItem，使用hook
 
- Context
+Context
 
 - 是 React 自带的 API（`createContext` + `useContext`）。
 - 适合组件树中少量状态共享，例如：菜单的选中项、主题色、语言切换等。
@@ -379,17 +383,15 @@ const passedContext: IMenuContext = {
 
 ```js
 return (
-    	//包裹
-        <MenuContext.Provider value={passedContext}>
-            <ul className={classes} style={style}>
-                {children}
-            </ul>
-        </MenuContext.Provider>
-        //包裹
-    )
+  //包裹
+  <MenuContext.Provider value={passedContext}>
+    <ul className={classes} style={style}>
+      {children}
+    </ul>
+  </MenuContext.Provider>
+  //包裹
+);
 ```
-
-
 
 ### 测试
 
@@ -432,8 +434,8 @@ const classes = classNames('menu-item', {
 
 ```js
 await waitFor(() => {
-  expect(wrapper.getByText('xyz')).toHaveClass('active')
-})
+  expect(wrapper.getByText("xyz")).toHaveClass("active");
+});
 ```
 
 - `waitFor` 会循环执行回调，直到：
@@ -445,23 +447,23 @@ await waitFor(() => {
 
 ```js
 beforeEach(() => {
-    // 每个测试用例运行前执行
-    wrapper = render(generateMenu(defaultProps))
-    //拿到被标记 data-testid="test-menu" 的 DOM 元素(即<ul>)
-    menuElement = wrapper.getByTestId('test-menu')
-    activeElement = wrapper.getByText('active')
-    disabledElement = wrapper.getByText('disabled')
-  })
+  // 每个测试用例运行前执行
+  wrapper = render(generateMenu(defaultProps));
+  //拿到被标记 data-testid="test-menu" 的 DOM 元素(即<ul>)
+  menuElement = wrapper.getByTestId("test-menu");
+  activeElement = wrapper.getByText("active");
+  disabledElement = wrapper.getByText("disabled");
+});
 ```
 
 ```js
-test('vertical menu', () => {
-    //清除wrapper渲染的defaultProps，里面也有test-menu所以查找到多个
-    cleanup()
-    const verticalWrapper = render(generateMenu(VerticalProps))
-    const verticalMenuElement = verticalWrapper.getByTestId('test-menu')
-    expect(verticalMenuElement).toHaveClass('menu-vertical')  // 检查默认类名
-  })
+test("vertical menu", () => {
+  //清除wrapper渲染的defaultProps，里面也有test-menu所以查找到多个
+  cleanup();
+  const verticalWrapper = render(generateMenu(VerticalProps));
+  const verticalMenuElement = verticalWrapper.getByTestId("test-menu");
+  expect(verticalMenuElement).toHaveClass("menu-vertical"); // 检查默认类名
+});
 ```
 
 ### renderChildren
@@ -523,18 +525,20 @@ const renderChildren = () => {
 在menuItems中定义了displayName
 
 ```js
-MenuItem.displayName = 'MenuItem'
+MenuItem.displayName = "MenuItem";
 ```
 
 #### 测试（浏览器中）：
 
 ```js
 <Menu mode="vertical" defaultIndex={0} onSelect={(index) => console.log(index)}>
-        <MenuItem index={0}>首页</MenuItem>
-        <MenuItem index={1} disabled>关于</MenuItem>
-        <MenuItem index={2}>联系</MenuItem>
-        <li>123</li> 
-        //输入不合法字符
+  <MenuItem index={0}>首页</MenuItem>
+  <MenuItem index={1} disabled>
+    关于
+  </MenuItem>
+  <MenuItem index={2}>联系</MenuItem>
+  <li>123</li>
+  //输入不合法字符
 </Menu>
 ```
 
@@ -553,21 +557,21 @@ Vitest 测试：默认console.log被拦截，需要 `spyOn` 才能捕获。
 - 调用参数
 
 ```js
-const spy = vi.spyOn(console, 'error')//监听console函数
+const spy = vi.spyOn(console, "error"); //监听console函数
 
-expect(spy).toHaveBeenCalledWith('Menu children must be function component')
-expect(spy).toHaveBeenCalledWith('Menu children must be MenuItem')
+expect(spy).toHaveBeenCalledWith("Menu children must be function component");
+expect(spy).toHaveBeenCalledWith("Menu children must be MenuItem");
 //恢复原函数，也就是撤销 spy 的监听
-spy.mockRestore()
+spy.mockRestore();
 ```
 
 #### 自动添加index
 
 ```js
-if (displayName === 'MenuItem') {
-     //给menuitem自动添加index属性
-     const indexProp = childElement.props.index ?? index;
-     return React.cloneElement(childElement, { index: indexProp });
+if (displayName === "MenuItem") {
+  //给menuitem自动添加index属性
+  const indexProp = childElement.props.index ?? index;
+  return React.cloneElement(childElement, { index: indexProp });
 }
 ```
 
@@ -607,16 +611,14 @@ const { index: currentActive, mode } = useContext(MenuContext)
 
 ```js
 return (
-        <li key={index} className='submenu-item' {...mouseEvents}>
-            <div className='submenu-title' {...clickEvents}>
-                {title}
-            </div>
+  <li key={index} className="submenu-item" {...mouseEvents}>
+    <div className="submenu-title" {...clickEvents}>
+      {title}
+    </div>
 
-            <ul className={classes}>
-                {renderChildren()}
-            </ul>
-        </li>
-    )
+    <ul className={classes}>{renderChildren()}</ul>
+  </li>
+);
 ```
 
 #### 区分MenuItem和subMenu中的MenuItem的共有index
@@ -678,31 +680,31 @@ const createStyleFile = () => {
 ```
 
 ```js
-wrapper.container.appendChild(createStyleFile())
+wrapper.container.appendChild(createStyleFile());
 ```
 
 使用异步实现
 
 ```js
-test('horizontal submenu hover and click', async () => {
-    expect(wrapper.queryByText('子项1')).not.toBeVisible()
-    const dropdownElement = wrapper.getByText('下拉菜单')
-    //模拟鼠标悬停事件
-    fireEvent.mouseEnter(dropdownElement)
-    await waitFor(() => {
-      expect(wrapper.getByText('子项1')).toBeVisible()
-    })
-    //模拟点击事件
-    fireEvent.click(wrapper.getByText('子项1'))
-    await waitFor(() => {
-      expect(defaultProps.onSelect).toHaveBeenCalledWith('4-0')
-    })
-    //模拟鼠标移出事件
-    fireEvent.mouseLeave(dropdownElement)
-    await waitFor(() => {
-      expect(wrapper.getByText('子项1')).not.toBeVisible()
-    })   
-  })
+test("horizontal submenu hover and click", async () => {
+  expect(wrapper.queryByText("子项1")).not.toBeVisible();
+  const dropdownElement = wrapper.getByText("下拉菜单");
+  //模拟鼠标悬停事件
+  fireEvent.mouseEnter(dropdownElement);
+  await waitFor(() => {
+    expect(wrapper.getByText("子项1")).toBeVisible();
+  });
+  //模拟点击事件
+  fireEvent.click(wrapper.getByText("子项1"));
+  await waitFor(() => {
+    expect(defaultProps.onSelect).toHaveBeenCalledWith("4-0");
+  });
+  //模拟鼠标移出事件
+  fireEvent.mouseLeave(dropdownElement);
+  await waitFor(() => {
+    expect(wrapper.getByText("子项1")).not.toBeVisible();
+  });
+});
 ```
 
 ## Icon
@@ -710,16 +712,16 @@ test('horizontal submenu hover and click', async () => {
 从fontawesome导入后加入library
 
 ```js
-import Icon from './components/Icon/icon'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
-library.add(fas)
+import Icon from "./components/Icon/icon";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+library.add(fas);
 ```
 
 使用后出现一个向下箭头
 
 ```js
-<Icon icon='arrow-down' theme='danger' size='10x' />
+<Icon icon="arrow-down" theme="danger" size="10x" />
 ```
 
 ### 动态箭头
@@ -760,21 +762,19 @@ rotate旋转180°
 
 ```js
 <li key={index} className={submenuItemclasses} {...mouseEvents}>
-            <div className='submenu-title' {...clickEvents}>
-                {title}
-                <Icon icon='angle-down' className='arrow-icon' />
-            </div>
+  <div className="submenu-title" {...clickEvents}>
+    {title}
+    <Icon icon="angle-down" className="arrow-icon" />
+  </div>
 
-            <ul className={classes}>
-                {renderChildren()}
-            </ul>
-        </li>
+  <ul className={classes}>{renderChildren()}</ul>
+</li>
 ```
 
 ### 下拉菜单栏动画
 
 ```js
-import {CSSTransition} from 'react-transition-group'
+import { CSSTransition } from "react-transition-group";
 ```
 
 ```js
@@ -806,7 +806,7 @@ import {CSSTransition} from 'react-transition-group'
 
 React 18+ 开始，`findDOMNode` 已经被移除， `react-transition-group` 内部还在偷偷用ReactDOM.findDOMNode(this)
 
-用 `nodeRef` 彻底绕开 findDOMNode，nodeRef` 替代 `findDOMNode
+用 `nodeRef` 彻底绕开 findDOMNode，nodeRef`替代`findDOMNode
 
 ```js
 const nodeRef = useRef<HTMLUListElement>(null)
@@ -825,8 +825,8 @@ const nodeRef = useRef<HTMLUListElement>(null)
 ```
 
 CSSTransition
-   |
-   |—— 内部调用 findDOMNode(this)  ❌
+|
+|—— 内部调用 findDOMNode(this) ❌
 
 你 -> useRef() -> DOM 节点 -> nodeRef -> CSSTransition✅
 
@@ -834,7 +834,7 @@ CSSTransition
 
 离开时css中设置为display：none，`display` 是 **不可动画的属性**。
 
-添加unmountOnExit属性等 *离场动画播完* 再把 DOM 从页面中删除
+添加unmountOnExit属性等 _离场动画播完_ 再把 DOM 从页面中删除
 
 ```js
 <CSSTransition
@@ -842,7 +842,7 @@ CSSTransition
                 timeout={300}
                 classNames='zoom-in-top'
                 appear
-                nodeRef={nodeRef} 
+                nodeRef={nodeRef}
                 unmountOnExit //
             >
 ```
@@ -1031,10 +1031,10 @@ preview.js是 **Storybook 的“全局配置文件”**，给所有 stories 设�
 /storybook/preview.js
 
 ```js
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
-library.add(fas)
-import '../src/styles/index.scss'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+library.add(fas);
+import "../src/styles/index.scss";
 ```
 
 #### 模板
@@ -1104,56 +1104,61 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLElement>, 'size
 
 ```js
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
-import { playwright } from '@vitest/browser-playwright';
-const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
+import { playwright } from "@vitest/browser-playwright";
+const dirname =
+  typeof __dirname !== "undefined"
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url));
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react()],
   test: {
-    globals: true,//被覆盖
+    globals: true, //被覆盖
     // 可以直接使用 test/expect
-    environment: "jsdom" // 模拟浏览器环境
-    ,
-
-    projects: [{
-      extends: true,
-      plugins: [
-      // The plugin will run tests for the stories defined in your Storybook config
-      // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
-      storybookTest({
-        configDir: path.join(dirname, '.storybook')//只有对storybook的测试
-      })],
-      test: {
-        name: 'storybook',
-        browser: {
-          enabled: true,
-          headless: true,
-          provider: playwright({}),
-          instances: [{
-            browser: 'chromium'
-          }]
+    environment: "jsdom", // 模拟浏览器环境
+    projects: [
+      {
+        extends: true,
+        plugins: [
+          // The plugin will run tests for the stories defined in your Storybook config
+          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
+          storybookTest({
+            configDir: path.join(dirname, ".storybook"), //只有对storybook的测试
+          }),
+        ],
+        test: {
+          name: "storybook",
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [
+              {
+                browser: "chromium",
+              },
+            ],
+          },
+          setupFiles: [".storybook/vitest.setup.ts"],
         },
-        setupFiles: ['.storybook/vitest.setup.ts']
-      }
-    },
-    {
-    extends: true,
-    test: {
-      include: ['tests/**/*.test.{ts,tsx}', 'src/**/*.test.tsx'],//加上test文件的测试
-      globals: true,
-      environment: 'jsdom'
-    }
-  }
-  ]
-  }
+      },
+      {
+        extends: true,
+        test: {
+          include: ["tests/**/*.test.{ts,tsx}", "src/**/*.test.tsx"], //加上test文件的测试
+          globals: true,
+          environment: "jsdom",
+        },
+      },
+    ],
+  },
 });
 ```
 
@@ -1170,7 +1175,7 @@ export default defineConfig({
 直接使用filter
 
 ```js
-data.filter(item => item.includes(keyword))
+data.filter((item) => item.includes(keyword));
 ```
 
 但如果有很多数据，会导致浏览器内存爆炸、页面卡死等
@@ -1180,7 +1185,7 @@ data.filter(item => item.includes(keyword))
 fetch实时请求
 
 ```js
-fetch(`url?keyword=${keyword}`)//异步代码
+fetch(`url?keyword=${keyword}`); //异步代码
 ```
 
 输入触发查询，查询方式由 `fetchSuggestions` 抽象，当输入内容时，触发`handleChange`调用 `fetchSuggestions` 展示建议
@@ -1360,18 +1365,20 @@ const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
 添加loading的icon
 
 ```js
-const [loading,setLoading] = useState(false);
+const [loading, setLoading] = useState(false);
 ```
 
 ```js
-            setLoading(true);
-            const results = await fetchSuggestions(value);
-            setSuggestions(results);
-            setLoading(false);
+setLoading(true);
+const results = await fetchSuggestions(value);
+setSuggestions(results);
+setLoading(false);
 ```
 
 ```js
-{loading && <Icon icon="spinner" spin/>}
+{
+  loading && <Icon icon="spinner" spin />;
+}
 ```
 
 ### 防抖节流
@@ -1474,21 +1481,22 @@ React 会在组件卸载或依赖变化时调用这个函数，常用于清理�
 
 ```js
 <ul>
-                {suggestions.map((item, index) => {
-                    // 高亮显示当前选中项
-                    const itemClasses = classNames('suggestion-item', {
-                        'item-highlighted': index === highlightIndex
-                    });
-                    return (
-                        <li key={index}
-                            className={itemClasses}
-                            onClick={() => handleSelect(item)}>
-                            {renderTemplate(item)}
-                        </li>
-                    )
-                }
-                )}
-            </ul>
+  {suggestions.map((item, index) => {
+    // 高亮显示当前选中项
+    const itemClasses = classNames("suggestion-item", {
+      "item-highlighted": index === highlightIndex,
+    });
+    return (
+      <li
+        key={index}
+        className={itemClasses}
+        onClick={() => handleSelect(item)}
+      >
+        {renderTemplate(item)}
+      </li>
+    );
+  })}
+</ul>
 ```
 
 #### 修复在输入变化时，highlight还指向上一个位置
@@ -1525,7 +1533,7 @@ React 会在组件卸载或依赖变化时调用这个函数，常用于清理�
 **增加一个 ref 标志位来阻断请求**
 
 `ref` 是一个“能在组件重新渲染时一直保持不变的普通变量容器”，
- 修改它👉不会触发组件重新渲染。
+修改它👉不会触发组件重新渲染。
 
 所以用ref代替state
 
@@ -1537,7 +1545,7 @@ const myRef = useRef(0);
 
 ```js
 {
-  current: 0
+  current: 0;
 }
 ```
 
@@ -1546,7 +1554,7 @@ const myRef = useRef(0);
 修改值也只改 .current
 
 ```js
-myRef.current = 100;   // ✅
+myRef.current = 100; // ✅
 ```
 
 而这个操作：
@@ -1609,7 +1617,7 @@ useClickOutside 监听 document 点击
 ```
 
 ```js
-const componentRef = useRef<HTMLDivElement>(null);
+const componentRef = useRef < HTMLDivElement > null;
 ```
 
 componentRef 是一个 引用对象 (RefObject<HTMLDivElement>)。
@@ -1618,26 +1626,26 @@ componentRef.current 的类型是 HTMLDivElement | null，初始化时为 null�
 
 ```js
 useClickOutside(componentRef, () => {
-        setSuggestions([]);
-    });
+  setSuggestions([]);
+});
 ```
 
 当点击时调用组件useClickOutside
 
 ```js
 return (
-    //绑定在最外层元素上
-        <div className="auto-complete-wrapper" ref={componentRef}>
-            <Input
-                value={inputValue}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-                {...restProps}
-            />
-            {loading && <Icon icon="spinner" spin />}
-            {suggestions.length > 0 && generateDropDown()}
-        </div>
-    )
+  //绑定在最外层元素上
+  <div className="auto-complete-wrapper" ref={componentRef}>
+    <Input
+      value={inputValue}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
+      {...restProps}
+    />
+    {loading && <Icon icon="spinner" spin />}
+    {suggestions.length > 0 && generateDropDown()}
+  </div>
+);
 ```
 
 组件useClickOutside定义
@@ -1688,7 +1696,7 @@ upload一个文件的生命周期：
 ```js
 start->点击按钮选择文件->beforeUpload(file)->onProgress(event.file)->onChange(file)->onSuccess(response,file)->点击删除按钮->onRemoved(file)
     |
- onError(erorr,file)   
+ onError(erorr,file)
 ```
 
 beforeUpload(file)上传前检查文件大小、类型是否符合
@@ -1716,18 +1724,20 @@ Axios 提供了封装好的异步请求、统一拦截和易用 API，比原生 
 GET请求
 
 ```js
-const [title, setTitle] = useState('')
-  useEffect(() => {
-    axios.get('https://jsonplaceholder.typicode.com/posts/1',{
+const [title, setTitle] = useState("");
+useEffect(() => {
+  axios
+    .get("https://jsonplaceholder.typicode.com/posts/1", {
       headers: {
-        'X-Requested-With': 'XMLHttpRequest'
+        "X-Requested-With": "XMLHttpRequest",
       },
-      responseType: 'json'
-    }).then(res => {
-      console.log(res.data)
-      setTitle(res.data.title)
+      responseType: "json",
     })
-  }, [])
+    .then((res) => {
+      console.log(res.data);
+      setTitle(res.data.title);
+    });
+}, []);
 ```
 
 成功在请求头中添加'X-Requested-With': 'XMLHttpRequest'![image-20251205011334479](assets/image-20251205011334479.png)
@@ -1736,17 +1746,18 @@ POST请求
 
 ```js
 const postData = {
-    title: 'title',
-    body: 'body'
-  }
+  title: "title",
+  body: "body",
+};
 
 useEffect(() => {
-    axios.post('https://jsonplaceholder.typicode.com/posts', postData)
-      .then(res => {
-        console.log(res.data)
-        setTitle(res.data.title)
-      })
-  }, [])
+  axios
+    .post("https://jsonplaceholder.typicode.com/posts", postData)
+    .then((res) => {
+      console.log(res.data);
+      setTitle(res.data.title);
+    });
+}, []);
 ```
 
 成功发送PSOT并返回201![image-20251205012300583](assets/image-20251205012300583.png)
@@ -1760,13 +1771,17 @@ Request Payload 显示 `postData`
 #### 1、表单上传（Form Submit）
 
 ```js
-<div className='App' style={{ marginTop: '100px', marginLeft: '100px' }}>
-      {/* 格式设置为multipart/form-data */}
-      <form method="post" encType="multipart/form-data" action="https://jsonplaceholder.typicode.com/posts">
-        <input type='file' name='file'></input>
-        <button type="submit">提交</button>
-      </form>
-    </div>
+<div className="App" style={{ marginTop: "100px", marginLeft: "100px" }}>
+  {/* 格式设置为multipart/form-data */}
+  <form
+    method="post"
+    encType="multipart/form-data"
+    action="https://jsonplaceholder.typicode.com/posts"
+  >
+    <input type="file" name="file"></input>
+    <button type="submit">提交</button>
+  </form>
+</div>
 ```
 
 `<form>` 标签的 `method="post"` + `encType="multipart/form-data"` 表示 **以 POST 方式上传文件**。
@@ -2027,8 +2042,8 @@ let _file: UploadFile = {
 
 ```js
 useEffect(() => {
-        console.log('fileList 更新了:', fileList)
-    }, [fileList])
+  console.log("fileList 更新了:", fileList);
+}, [fileList]);
 ```
 
 成功打印fileList
@@ -2053,7 +2068,7 @@ useEffect(() => {
 2. **传入函数（函数式更新）**
 
    ```js
-   setFileList(prev => [...prev, newFile]);
+   setFileList((prev) => [...prev, newFile]);
    ```
 
    - React 会把这个函数调用，传入 **最新的 state** 作为参数（这里是 `prev`）。
@@ -2064,11 +2079,17 @@ useEffect(() => {
 
 ```js
 if (percentage < 100) {
-    //找到文件uid，函数式更新
-        setFileList(prev => prev.map(item => item.uid === _file.uid ? { ...item, percent: percentage, status: 'uploading' } : item))
-        if (onProgress) {
-                        onProgress(percentage, file)
-                    }
+  //找到文件uid，函数式更新
+  setFileList((prev) =>
+    prev.map((item) =>
+      item.uid === _file.uid
+        ? { ...item, percent: percentage, status: "uploading" }
+        : item,
+    ),
+  );
+  if (onProgress) {
+    onProgress(percentage, file);
+  }
 }
 ```
 
@@ -2135,36 +2156,36 @@ export default UpLoadlist
 
 ```js
 const defaultFileList = [
-    {
-        uid: '1',
-        size: 1024 * 1024,
-        name: 'file1.txt',
-        status: 'success',
-        percent: 100,
-        raw: new File([''], 'file1.txt'),
-        response: {
-            id: 1,
-            name: 'file1.txt',
-        },
+  {
+    uid: "1",
+    size: 1024 * 1024,
+    name: "file1.txt",
+    status: "success",
+    percent: 100,
+    raw: new File([""], "file1.txt"),
+    response: {
+      id: 1,
+      name: "file1.txt",
     },
-    {
-        uid: '2',
-        size: 1024 * 1024,
-        name: 'file2.txt',
-        status: 'error',
-        percent: 50,
-        raw: new File([''], 'file2.txt'),
-        error: new Error('上传失败'),
-    },
-    {
-        uid: '3',
-        size: 1024 * 1024,
-        name: 'file3.txt',
-        status: 'uploading',
-        percent: 75,
-        raw: new File([''], 'file3.txt'),
-    },
-]
+  },
+  {
+    uid: "2",
+    size: 1024 * 1024,
+    name: "file2.txt",
+    status: "error",
+    percent: 50,
+    raw: new File([""], "file2.txt"),
+    error: new Error("上传失败"),
+  },
+  {
+    uid: "3",
+    size: 1024 * 1024,
+    name: "file3.txt",
+    status: "uploading",
+    percent: 75,
+    raw: new File([""], "file3.txt"),
+  },
+];
 ```
 
 ![image-20251205183952066](assets/image-20251205183952066.png)
@@ -2381,4 +2402,3 @@ const handleDragEnter = (e: DragEvent<HTMLElement>) => {
 ```
 
 ### 测试异步代码
-

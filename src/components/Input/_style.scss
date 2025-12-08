@@ -1,6 +1,6 @@
 @use "../../styles/_variables" as vars;
 @use "sass:color";
-@use '../../../src/styles/mixin' as mixins;
+@use "../../../src/styles/mixin" as mixins;
 
 .input-wrapper {
   display: flex;
@@ -22,7 +22,7 @@
     }
   }
 }
-.icon-wrapper+.input-inner {
+.icon-wrapper + .input-inner {
   padding-right: 35px;
 }
 .input-inner {
