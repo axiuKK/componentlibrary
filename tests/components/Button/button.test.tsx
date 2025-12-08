@@ -68,4 +68,10 @@ describe("Button 组件", () => {
     fireEvent.click(btn);
     expect(defaultProps.onClick).not.toHaveBeenCalledTimes(0);
   });
+  test("responds to Enter key", () => {
+    const onClick = vi.fn();
+    const { getByText } = render(<Button onClick={onClick}>Test</Button>);
+    fireEvent.keyDown(getByText("Test"), { key: "Enter" });
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
 });
