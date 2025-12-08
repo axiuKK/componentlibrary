@@ -16,6 +16,17 @@ $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 
+$blue:    #0d6efd !default;
+$indigo:  #6610f2 !default;
+$purple:  #6f42c1 !default;
+$pink:    #d63384 !default;
+$red:     #dc3545 !default;
+$orange:  #fd7e14 !default;
+$yellow:  #fadb14 !default;
+$green:   #52c41a !default;
+$teal:    #20c997 !default;
+$cyan:    #17a2b8 !default;
+
 // 字体
 $font-family-base:
   -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !default;
@@ -47,10 +58,28 @@ $line-height-sm: 1.25 !default;
 $body-color: #212529 !default;
 
 // 主题色
-$primary: #0d6efd !default;
-$danger: #dc3545 !default;
 $default: #f8f9fa !default;
 $link: #0d6efd !default;
+$primary:       $blue !default;
+$secondary:     $gray-600 !default;
+$success:       $green !default;
+$info:          $cyan !default;
+$warning:       $yellow !default;
+$danger:        $red !default;
+$light:         $gray-100 !default;
+$dark:          $gray-800 !default;
+
+$theme-colors: 
+(
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
+  "light":      $light,
+  "dark":       $dark
+);
 
 // 字体
 $font-family-base:

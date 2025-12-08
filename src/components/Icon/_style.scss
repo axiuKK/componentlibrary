@@ -1,19 +1,8 @@
-.icon-primary {
-  color: #1677ff;
-}
+@use "../../styles/_variables" as vars;
+@use "sass:color";
 
-.icon-success {
-  color: #52c41a;
-}
-
-.icon-danger {
-  color: #ff4d4f;
-}
-
-.icon-warning {
-  color: #faad14;
-}
-
-.icon-info {
-  color: #909399;
+@each $key, $val in vars.$theme-colors {
+  .icon-#{$key} {
+    color: $val;
+  }
 }
