@@ -8,32 +8,49 @@ type MenuMode = "horizontal" | "vertical";
 export interface MenuProps {
   //active菜单的索引值
   defaultIndex?: string;
+  activeIndex?: string;
   className?: string;
   mode?: MenuMode;
   style?: React.CSSProperties;
   onSelect?: (index: string) => void;
+  onChange?: (index: string) => void;
   children: React.ReactNode;
   defaultOpenSubMenus?: string[];
 }
 
 const Menu = ({
   defaultIndex = "0",
+  activeIndex,
   className = "",
   mode = "horizontal",
   style = {},
   onSelect = () => {},
+  onChange = () => {},
   children,
   defaultOpenSubMenus = [],
 }: MenuProps) => {
-  const [currentActive, setCurrentActive] = useState(defaultIndex);
+  const isControlled = activeIndex !== undefined;
+  const [innerActive, setinnerActive] = useState(defaultIndex);
+  const currentActive = isControlled ? activeIndex : innerActive;
+
+  // 处理点击选择
+  const handleSelect = (index: string) => {
+    if (isControlled) {
+      // 受控模式：只通知父组件，不自己改状态
+      onChange?.(index);
+      onSelect?.(index); // 兼容旧 API
+    } else {
+      // 非受控模式：自己更新 + 通知
+      setinnerActive(index);
+      onChange?.(index);
+      onSelect?.(index);
+    }
+  };
+
   //实际传入的值
   const passedContext: IMenuContext = {
     index: currentActive,
-    onSelect: (index) => {
-      setCurrentActive(index);
-      onSelect(index);
-      alert(index);
-    },
+    onSelect: handleSelect,
     mode: mode,
     defaultOpenSubMenus: defaultOpenSubMenus,
   };

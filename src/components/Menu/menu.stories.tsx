@@ -45,3 +45,13 @@ export const Vertical: Story = {
     defaultIndex: "1",
   },
 };
+
+export const Controlled: Story = {
+  render: Template,
+  args: {
+    children: "Vertical Menu",
+    mode: "vertical",
+    defaultIndex: "1",
+    activeIndex: "1",
+  },
+};
