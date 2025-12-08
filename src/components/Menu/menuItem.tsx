@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { MenuContext } from "./menu";
+import { MenuContext } from "./menuContext";
 import { useContext } from "react";
 
 export interface MenuItemProps {

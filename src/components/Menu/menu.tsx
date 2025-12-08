@@ -1,6 +1,7 @@
 import classNames from "classnames";
-import React, { createContext, useState } from "react";
+import React, { useState } from "react";
 import type { MenuItemProps } from "./menuItem";
+import { MenuContext, type IMenuContext } from "./menuContext";
 
 type MenuMode = "horizontal" | "vertical";
 
@@ -14,22 +15,6 @@ export interface MenuProps {
   children: React.ReactNode;
   defaultOpenSubMenus?: string[];
 }
-
-//context属性种类
-interface IMenuContext {
-  index: string;
-  onSelect: (index: string) => void;
-  mode?: MenuMode;
-  defaultOpenSubMenus?: string[];
-}
-
-//context默认值
-export const MenuContext = createContext<IMenuContext>({
-  index: "0",
-  onSelect: () => {},
-  mode: "horizontal",
-  defaultOpenSubMenus: [],
-});
 
 const Menu = ({
   defaultIndex = "0",

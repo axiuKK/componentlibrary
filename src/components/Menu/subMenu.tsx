@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useContext, useState, useRef } from "react";
-import { MenuContext } from "./menu";
+import { MenuContext } from "./menuContext";
 import React from "react";
 import type { MenuItemProps } from "./menuItem";
 import Icon from "../Icon/icon";
@@ -46,7 +46,7 @@ const SubMenu = ({
     setMenuOpen(!menuOpen);
   };
   //处理hover
-  let timer: any;
+  let timer: ReturnType<typeof setTimeout>;
   const handleMouse = (e: React.MouseEvent, toggle: boolean) => {
     clearTimeout(timer);
     e.stopPropagation();
