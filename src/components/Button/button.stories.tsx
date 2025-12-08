@@ -16,7 +16,7 @@ type Story = StoryObj<typeof Button>;
 
 //模板
 const Template = (args: React.ComponentProps<typeof Button>) => (
-  <Button {...args} />
+  <Button onClick={() => console.log("click")} {...args} />
 );
 
 export const Default: Story = {

@@ -34,6 +34,7 @@ export const Button = ({
   size = "sm",
   children,
   href,
+  onClick,
   ...restProps
 }: ButtonProps) => {
   // btn, btn-lg, btn-primary 拼接class
@@ -44,6 +45,26 @@ export const Button = ({
     [`btn-${size}`]: size,
     disabled: btnType === "link" && disabled,
   });
+
+  // 处理键盘事件
+  const handleKeyDownButton = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if ((e.key === "Enter" || e.key === " ") && !disabled) {
+      e.preventDefault();
+      onClick?.(e as unknown as React.MouseEvent<HTMLButtonElement>);
+    }
+  };
+
+  const handleKeyDownAnchor = (e: React.KeyboardEvent<HTMLAnchorElement>) => {
+    if ((e.key === "Enter" || e.key === " ") && !disabled) {
+      e.preventDefault(); // 阻止默认滚动
+      onClick?.(e as unknown as React.MouseEvent<HTMLAnchorElement>);
+
+      if (href) {
+        window.open(href, "_self"); // 模拟原生跳转
+      }
+    }
+  };
+
   if (btnType === "link" && href) {
     if (disabled) {
       return (
@@ -53,14 +74,26 @@ export const Button = ({
       );
     } else {
       return (
-        <a className={classes} href={href} {...restProps}>
+        <a
+          className={classes}
+          href={href}
+          onClick={onClick}
+          onKeyDown={handleKeyDownAnchor}
+          {...restProps}
+        >
           {children}
         </a>
       );
     }
   } else {
     return (
-      <button className={classes} disabled={disabled} {...restProps}>
+      <button
+        className={classes}
+        disabled={disabled}
+        onClick={onClick}
+        onKeyDown={handleKeyDownButton}
+        {...restProps}
+      >
         {children}
       </button>
     );
