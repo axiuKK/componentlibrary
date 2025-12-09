@@ -1600,7 +1600,7 @@ myRef.current = 100; // ✅
 ```js
 渲染 AutoComplete
      ↓
-componentRef 绑定到最外层 divi
+componentRef 绑定到最外层 div
      ↓
 useClickOutside 监听 document 点击
      ↓
@@ -2401,4 +2401,27 @@ const handleDragEnter = (e: DragEvent<HTMLElement>) => {
     }
 ```
 
-### 测试异步代码
+# 打包
+
+将每个组件得引入集中在各个组件得index.tsx中，再由主页面得index.tsx集中导入
+
+menu组件特殊，需要有子组件
+
+```js
+import Menu,{type MenuProps} from "./menu";
+import MenuItem,{type MenuItemProps} from "./menuItem";
+import SubMenu,{type SubMenuProps} from "./subMenu";
+
+// 定义复合组件类型
+export interface IMenuComponent extends React.FC<MenuProps> {
+  Item: React.FC<MenuItemProps>;
+  SubItem: React.FC<SubMenuProps>;
+}
+
+const TransMenu = Menu as IMenuComponent;
+TransMenu.Item = MenuItem;
+TransMenu.SubItem = SubMenu;
+
+export default TransMenu;
+```
+
