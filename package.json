@@ -11,7 +11,8 @@
     "test": "vitest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build-ts": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^7.1.0",

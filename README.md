@@ -2403,7 +2403,9 @@ const handleDragEnter = (e: DragEvent<HTMLElement>) => {
 
 # 打包
 
-将每个组件得引入集中在各个组件得index.tsx中，再由主页面得index.tsx集中导入
+TS files.tsx-----tsc----->ES6 modules.jsx------->浏览器可执行的 JS
+
+1、将每个组件得引入集中在各个组件得index.tsx中，再由主页面得index.tsx集中导入
 
 menu组件特殊，需要有子组件
 
@@ -2425,3 +2427,34 @@ TransMenu.SubItem = SubMenu;
 export default TransMenu;
 ```
 
+2、添加tsconfig.build.json配置（tsc）
+
+```js
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "esnext",
+    "target": "es5",
+    "declaration": true,
+    "jsx": "react",
+    "moduleResolution":"Node",
+    "allowSyntheticDefaultImports": true,
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/**/*.test.tsx",
+    "src/**/*.stories.tsx",
+    "src/setupTests.ts",
+  ]
+}
+```
+
+用 **TypeScript 编译器** 按照指定的配置文件来构建项目
+
+```
+"build-ts": "tsc -p tsconfig.build.json"
+```
+
+命令：tsc -p tsconfig.build.json
