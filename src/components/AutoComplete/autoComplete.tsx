@@ -12,9 +12,9 @@ import Transition from "../Transition/transition";
 interface DataSourceObject {
   value: string;
 }
-export type DataSourceType<T = {}> = T & DataSourceObject;
+export type DataSourceType<T = unknown> = T & DataSourceObject;
 
-export interface AutoCompleteProps<T = {}> extends Omit<
+export interface AutoCompleteProps<T = unknown> extends Omit<
   InputProps,
   "onSelect"
 > {
@@ -45,8 +45,8 @@ export const AutoComplete = <T,>({
 
   //监听输入值变化
   useEffect(() => {
-    setHighlightIndex(-1);
     const fetchData = async () => {
+      setHighlightIndex(-1);
       if (debouncedValue && triggerSearch.current) {
         setLoading(true);
         const results = await fetchSuggestions(debouncedValue);
@@ -58,7 +58,7 @@ export const AutoComplete = <T,>({
     };
 
     fetchData();
-  }, [debouncedValue]);
+  }, [debouncedValue, fetchSuggestions]);
 
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

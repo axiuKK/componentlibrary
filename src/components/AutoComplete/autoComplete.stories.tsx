@@ -1,4 +1,4 @@
-import { AutoComplete } from "./autoComplete";
+import { AutoComplete, type DataSourceType } from "./autoComplete";
 import { type Meta, type StoryObj } from "@storybook/react";
 
 const autoCompleteMeta: Meta<typeof AutoComplete> = {
@@ -35,6 +35,14 @@ const lakersWithNumber = [
   { value: "howard", number: 39 },
   { value: "kuzma", number: 0 },
 ];
+
+interface GitHubUser {
+  login: string;
+  id: number;
+  avatar_url: string;
+  [key: string]: unknown; // 捕获其他未知字段
+}
+
 //菜单为string类型
 export const Default: StoryObj<typeof AutoComplete> = {
   args: {
@@ -81,10 +89,13 @@ export const Async: StoryObj<typeof AutoComplete> = {
     fetchSuggestions: async (str: string) => {
       const res = await fetch(`https://api.github.com/search/users?q=${str}`);
       const data = await res.json();
-      const formatItems = data.items.slice(0, 10).map((item: any) => ({
-        value: item.login,
-        ...item,
-      }));
+      const formatItems: DataSourceType<GitHubUser>[] = data.items
+        .slice(0, 10)
+        .map((item: GitHubUser) => ({
+          value: item.login,
+          ...item,
+        }));
+
       console.log(formatItems);
       return formatItems;
     },
