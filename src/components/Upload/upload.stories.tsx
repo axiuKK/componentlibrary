@@ -1,6 +1,7 @@
 import Icon from "../Icon/icon";
-import Upload from "./upload";
+import Upload, { type UploadFile } from "./upload";
 import { type Meta, type StoryObj } from "@storybook/react";
+import { type UploadProps } from "./upload";
 
 const uploadMeta: Meta<typeof Upload> = {
   title: "Upload",
@@ -17,7 +18,7 @@ const uploadMeta: Meta<typeof Upload> = {
   tags: ["autodocs"],
 };
 
-const defaultFileList = [
+const defaultFileList: UploadFile[] = [
   {
     uid: "1",
     size: 1024 * 1024,
@@ -71,7 +72,7 @@ export default uploadMeta;
 
 type Story = StoryObj<typeof Upload>;
 
-const Template = (args: any) => {
+const Template = (args: UploadProps) => {
   return (
     <Upload
       {...args}

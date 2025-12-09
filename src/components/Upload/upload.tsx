@@ -7,8 +7,8 @@ export interface UploadProps {
   action: string;
   beforeUpload?: (file: File) => boolean | Promise<File>;
   onProgress?: (percentage: number, file: File) => void;
-  onSuccess?: (data: any, file: File) => void;
-  onError?: (error: any, file: File) => void;
+  onSuccess?: (data: unknown, file: File) => void;
+  onError?: (error: unknown, file: File) => void;
   onChange?: (file: File) => void;
   defaultFileList?: UploadFile[];
   onRemove?: (file: UploadFile) => void;
@@ -32,9 +32,9 @@ export interface UploadFile {
   //原始文件
   raw?: File;
   //上传成功后返回的数据
-  response?: any;
+  response?: unknown;
   //上传失败后返回的错误信息
-  error?: any;
+  error?: unknown;
 }
 
 const Upload = ({
@@ -106,7 +106,7 @@ const Upload = ({
     });
   };
   const post = (file: File) => {
-    let _file: UploadFile = {
+    const _file: UploadFile = {
       uid: Date.now().toString(),
       status: "ready",
       size: file.size,
@@ -133,7 +133,9 @@ const Upload = ({
         //实时监听文件上传进度，并把当前完成百分比通知给组件外部
         onUploadProgress: (e) => {
           // 每次上传有进度变化就会执行
-          let percentage = e.total ? Math.round((e.loaded * 100) / e.total) : 0;
+          const percentage = e.total
+            ? Math.round((e.loaded * 100) / e.total)
+            : 0;
           //防止与onSuccess冲突，只在进度不是100%时调用onProgress
           if (percentage < 100) {
             setFileList((prev) =>

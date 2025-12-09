@@ -1600,7 +1600,7 @@ myRef.current = 100; // ✅
 ```js
 渲染 AutoComplete
      ↓
-componentRef 绑定到最外层 div
+componentRef 绑定到最外层 divi
      ↓
 useClickOutside 监听 document 点击
      ↓
