@@ -30,4 +30,4 @@ jobs:
         run: pnpm build
 
       - name: Run tests
-        run: pnpm vitest --run --reporter=dot
+        run: pnpm test
