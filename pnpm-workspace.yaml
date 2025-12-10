@@ -1,3 +1,5 @@
+packages:
+  - "."
 overrides:
   react: link:../ComponentTest/node_modules/react
   react-dom: link:../ComponentTest/node_modules/react-dom
