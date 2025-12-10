@@ -2,46 +2,46 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 拉代码
-      - name: Checkout
-        uses: actions/checkout@v4
+      # 1. 拉代码
+      - uses: actions/checkout@v4
 
-      # 设置 Node
+      # 2. 装 Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: pnpm
 
-      # 安装 pnpm
-      - name: Install pnpm
+      # 3. 装 pnpm（非常关键的一步）
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
-      # 安装依赖
-      - name: Install dependencies
+      # 4. 验证 pnpm 是否成功
+      - name: Check pnpm
+        run: pnpm -v
+
+      # 5. 安装依赖
+      - name: Install deps
         run: pnpm install
 
-      # 运行 Lint
-      - name: Run lint
+      # 6. Lint
+      - name: Lint
         run: pnpm lint
 
-      # 跑测试
-      - name: Run tests
+      # 7. Test
+      - name: Test
         run: pnpm test
 
-      # 构建
+      # 8. Build
       - name: Build
         run: pnpm build
