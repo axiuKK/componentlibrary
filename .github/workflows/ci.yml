@@ -29,5 +29,5 @@ jobs:
       - name: Build project
         run: pnpm build
 
-      - name: Run Vitest
-        run: pnpm test
+      - name: Run tests
+  run: pnpm vitest --run --project=1 --reporter=dot
