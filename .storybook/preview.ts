@@ -10,6 +10,12 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
+        order: ["Welcome", "*"],
+      },
+    },
+    options: {
+      storySort: {
+        order: ["Welcome", "*"], // Welcome 放在最前面，* 表示其他所有 story
       },
     },
 
