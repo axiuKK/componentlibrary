@@ -7,8 +7,8 @@
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
   "files": [
-  "dist"
-],
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "clean": "rimraf dist",
@@ -23,6 +23,7 @@
     "build-css": "sass ./src/styles/index.scss ./dist/index.css"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
     "@fortawesome/free-regular-svg-icons": "^7.1.0",
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
@@ -77,9 +78,9 @@
     "vitest": "^4.0.14"
   },
   "peerDependencies": {
-  "react": ">=18.0.0",
-  "react-dom": ">=18.0.0"
-},
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,vue}": [
       "eslint --fix",
