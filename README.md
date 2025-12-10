@@ -2470,3 +2470,27 @@ pnpm run build-ts
 3、.scss` 文件编译成 `.css
 
 4、 `rimraf`，这是一个在 Node.js 里用来**跨平台删除文件/目录**的工具，相当于 `rm -rf`。在组件库打包里，它通常用于**先清空 dist 目录**，再重新 build，避免旧文件残留。
+
+5、pnpm link
+
+①在组件库目录执行
+
+```js
+pnpm link
+```
+
+这一步相当于：
+
+> 把你的组件库注册到 pnpm 的全局空间
+
+------
+
+② 到业务项目执行
+
+```js
+pnpm link your-package-name
+```
+
+这样：your-package-name` 就是你组件库 `package.json` 里的 `name
+
+> 业务项目就会通过软链接使用你的**本地组件库源码**
