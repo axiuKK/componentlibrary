@@ -55,4 +55,21 @@ export default defineConfig({
       },
     ],
   },
+  build: {
+    lib: {
+      entry: path.resolve(__dirname, "src/index.ts"),
+      name: "MyUI",
+      fileName: "my-ui",
+    },
+    rollupOptions: {
+      // 不把 react 打进包，交给使用者
+      external: ["react", "react-dom"],
+      output: {
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM",
+        },
+      },
+    },
+  },
 });

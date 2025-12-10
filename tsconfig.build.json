@@ -1,19 +1,23 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "module": "esnext",
-    "target": "es5",
     "declaration": true,
-    "jsx": "react",
-    "moduleResolution":"Node",
+    "target": "es2017",
+    "lib": ["DOM", "ES2017"],              // ← 支持 Promise / Array.from / includes
+    "jsx": "react-jsx",
+    "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "types": ["react", "react-dom", "node"] // ← 支持 process
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "exclude": [
-    "src/**/*.test.tsx",
-    "src/**/*.stories.tsx",
+    "tests/components/**/*.test.tsx",
+    "src/components/**/*.stories.tsx",
+    "src/stories/**/*.ts",
     "src/setupTests.ts",
+    "src/App.tsx",
+    "src/main.tsx"
   ]
 }

@@ -2405,7 +2405,9 @@ const handleDragEnter = (e: DragEvent<HTMLElement>) => {
 
 TS files.tsx-----tsc----->ES6 modules.jsx------->浏览器可执行的 JS
 
-1、将每个组件得引入集中在各个组件得index.tsx中，再由主页面得index.tsx集中导入
+1、创建入口文件
+
+将每个组件得引入集中在各个组件得index.tsx中，再由主页面得index.tsx集中导入
 
 menu组件特殊，需要有子组件
 
@@ -2458,3 +2460,9 @@ export default TransMenu;
 ```
 
 命令：tsc -p tsconfig.build.json
+
+```js
+pnpm run build-ts
+```
+
+成功打包在dist中
