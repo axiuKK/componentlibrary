@@ -24,12 +24,18 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.tsx"),
-      name: "MyUI",
-      fileName: "my-ui",
+      name: "ComponentLibrary",
+      fileName: (format) => `index.${format}.js`,
+      formats: ["es", "umd"], // 同时支持 ESM + UMD
     },
     rollupOptions: {
       // 不把 react 打进包，交给使用者
-      external: ["react", "react-dom"],
+      external: [
+        "react",
+        "react-dom",
+        "axios",
+        "@fortawesome/fontawesome-svg-core",
+      ],
       output: {
         globals: {
           react: "React",
