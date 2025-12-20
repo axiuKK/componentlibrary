@@ -1,17 +1,5 @@
-import {
-  beforeEach,
-  describe,
-  expect,
-  test,
-  vi,
-  type MockedFunction,
-} from "vitest";
-import {
-  fireEvent,
-  render,
-  waitFor,
-  type RenderResult,
-} from "@testing-library/react";
+import { beforeEach, describe, expect, test, vi } from "vitest";
+import { fireEvent, render, type RenderResult } from "@testing-library/react";
 import Upload, {
   type UploadProps,
 } from "../../../src/components/Upload/upload.js";
@@ -19,10 +7,21 @@ import "@testing-library/jest-dom/vitest";
 import axios from "axios";
 
 vi.mock("../Icon/icon", () => {
-  return (props: any) => {
-    return <span onClick={props.onClick}>{props.icon}</span>;
+  return (
+    props: React.HTMLAttributes<HTMLSpanElement> & {
+      icon: string;
+      "data-testid"?: string;
+    },
+  ) => {
+    // 保留 data-testid
+    return (
+      <span onClick={props.onClick} data-testid={props["data-testid"]}>
+        {props.icon}
+      </span>
+    );
   };
 });
+
 vi.mock("axios");
 const mockedAxios = vi.mocked(axios, true);
 
@@ -45,13 +44,28 @@ describe("Upload", () => {
     ) as HTMLInputElement;
     uploadArea = wrapper.queryByText("Click to upload") as HTMLElement;
   });
-  test("renders correctly", async () => {
-    const { queryByText } = wrapper;
-    mockedAxios.post.mockImplementation(() =>
-      Promise.resolve({ data: "cool" }),
-    );
-    expect(uploadArea).toBeInTheDocument();
-    expect(fileInput).not.toBeVisible();
+  test("uploads file correctly", async () => {
+    mockedAxios.post.mockResolvedValue({ data: "success" });
+
     fireEvent.change(fileInput, { target: { files: [testFile] } });
+
+    // 等待文件出现在列表
+    const uploadedFile = await wrapper.findByText("test.png");
+    expect(uploadedFile).toBeInTheDocument();
+
+    // 回调是否触发
+    expect(testProps.onChange).toHaveBeenCalledWith(testFile);
+    expect(testProps.onSuccess).toHaveBeenCalledWith("success", testFile);
+  });
+
+  test("drag file to upload area", async () => {
+    mockedAxios.post.mockResolvedValue({ data: "ok" });
+
+    fireEvent.dragEnter(uploadArea);
+    fireEvent.dragOver(uploadArea);
+    fireEvent.drop(uploadArea, { dataTransfer: { files: [testFile] } });
+
+    const uploadedFile = await wrapper.findByText("test.png");
+    expect(uploadedFile).toBeInTheDocument();
   });
 });
